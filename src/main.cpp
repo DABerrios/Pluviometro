@@ -13,7 +13,7 @@ RTC_DS3231 rtc;
 void logData(const char *filename, const String &data,bool serialout);
 const int LED_BUILTIN = 2;
 #define WAKEUP_PIN GPIO_NUM_34 
-#define SCK  17
+#define SCK  18
 #define MISO  19
 #define MOSI  23
 #define CS  5
@@ -32,13 +32,16 @@ void setup() {
         Serial.println("RTC lost power, setting the time...");
         rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
     }
+    
+    // Check the wake-up reason
+    esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
+    Serial.print("Wakeup reason: ");
+    Serial.println(wakeup_reason);
     if (!SD.begin(CS)) {
         Serial.println("SD Card initialization failed!");
         return;
     }
-    // Check the wake-up reason
-    esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
-
+    Serial.println("SD Card initialized successfully!");
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT0) {
         Serial.println("Woke up from GPIO HIGH!");
         // Perform actions upon wake-up
@@ -53,16 +56,17 @@ void setup() {
         snprintf(result, sizeof(result), "0.0409 %s %s %d", buffer, date, 12345);  
         Serial.println(result);
         Serial.println(buffer);
-        logData("rain_data.txt", result, true);
+        logData("/rain_data.txt", result, true);
         
     } else {
         Serial.println("Initial boot or not a GPIO wake-up...");
-        
     }
+
+    // Configure the wake-up pin
     esp_sleep_enable_ext0_wakeup(WAKEUP_PIN, 1);  // Wake up when pin is HIGH
+
     // Prepare to go back to deep sleep
     Serial.println("Entering deep sleep...");
-    
     delay(1000);  // Allow time for Serial logs to complete
     esp_deep_sleep_start();
 }
@@ -80,7 +84,7 @@ void loop() {
 
 // put function definitions here:
 void logData(const char *filename, const String &data,bool serialout) {
-  File file = SD.open(filename, FILE_WRITE);
+  File file = SD.open(filename, FILE_APPEND);
   if (!file && serialout) {
     Serial.println("Failed to open file for writing");
     return;
