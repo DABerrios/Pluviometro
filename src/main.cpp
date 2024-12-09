@@ -1,16 +1,16 @@
 #include <Arduino.h>
-#include "adc.h"
 #include <Wire.h>
 #include <SPI.h>
 #include <RTClib.h>
 #include <esp_sleep.h>
 #include "FS.h"
 #include "SD.h"
-#include "sd_adp.h"
+
 
 // put function declarations here:
 
 RTC_DS3231 rtc;
+void logData(const char *filename, const String &data,bool serialout);
 const int LED_BUILTIN = 2;
 #define WAKEUP_PIN GPIO_NUM_34 
 #define SCK  17
@@ -79,3 +79,23 @@ void loop() {
 }
 
 // put function definitions here:
+void logData(const char *filename, const String &data,bool serialout) {
+  File file = SD.open(filename, FILE_WRITE);
+  if (!file && serialout) {
+    Serial.println("Failed to open file for writing");
+    return;
+  }
+  if (file)
+  {
+    file.println(data);
+    file.close();
+  }
+  else if (serialout)
+  {
+    Serial.println("Error opening file for writing");
+  }
+  if(serialout){
+    Serial.println("Data written to SD: " + data);
+  }
+  
+}
