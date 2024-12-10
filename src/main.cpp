@@ -3,24 +3,39 @@
 #include <SPI.h>
 #include <RTClib.h>
 #include <esp_sleep.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <wifi.h>
 #include "FS.h"
 #include "SD.h"
 
-
-// put function declarations here:
-
-RTC_DS3231 rtc;
-void logData(const char *filename, const String &data,bool serialout);
-const int LED_BUILTIN = 2;
 #define WAKEUP_PIN GPIO_NUM_34
 #define WAKEUP_PIN_2_wifi GPIO_NUM_35 
 #define SCK  18
 #define MISO  19
 #define MOSI  23
 #define CS  5
+
+// put function declarations here:
+
+RTC_DS3231 rtc;
+void logData(const char *filename, const String &data,bool serialout);
+void handleWiFiServer();
+void handleDataLogging();
+void goToSleep();
+
+const int LED_BUILTIN = 2;
+// Network credentials
+const char* ssid = "ESP32_AP";
+const char* password = "12345678";
 //global variable
 int adc_output = 0;
-
+// Create an AsyncWebServer object on port 80
+AsyncWebServer server(80);
+// Variable to store received data
+String receivedData = "";
+// Flag to keep the ESP32 awake when the server is active
+bool serverActive = false;
 void setup() {
     Serial.begin(115200);
     delay(1000);  // Give time for Serial monitor to connect
@@ -48,47 +63,33 @@ void setup() {
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();
       if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN)){
-        Serial.println("Woke up from GPIO HIGH!");
-        // Perform actions upon wake-up for data logging
-        DateTime now = rtc.now();
-        char date[10] = "hh:mm:ss";
-        rtc.now().toString(date);
-        
-        Serial.print(date);
-        char buffer[20];
-        snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
-        char result[50];
-        snprintf(result, sizeof(result), "0.0409 %s %s %d", buffer, date, 12345);  
-        Serial.println(result);
-        Serial.println(buffer);
-        logData("/rain_data.txt", result, true);
+        handleDataLogging();
+        goToSleep();
       }
       else if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN_2_wifi)){
-        Serial.println("Woke up from GPIO HIGH!");
-        // Perform actions upon wake-up for wifi configuration
-        
+        handleWiFiServer();
       }
     } else {
         Serial.println("Initial boot or not a GPIO wake-up...");
     }
 
-      // Wake up when pin is HIGH
 
-    // Prepare to go back to deep sleep
-    Serial.println("Entering deep sleep...");
-    delay(1000);  // Allow time for Serial logs to complete
-    esp_deep_sleep_start();
+    
 }
 
 void loop() {
-  adc_output = analogRead(34);
-  Serial.println(adc_output);
-  delay(1000);
-  // put your main code here, to run repeatedly:
-  /*digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(100);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(100);*/                        // wait for a second
+  if (serverActive) {
+    // Check if the wakeup pin is pressed again to stop the server and sleep
+    if (digitalRead(WAKEUP_PIN_2_wifi) == HIGH) {
+            Serial.println("Stopping server and going to sleep...");
+            server.end();
+            serverActive = false;
+            goToSleep();
+        }     
+  }
+  else{   
+  goToSleep();
+  }                    
 }
 
 // put function definitions here:
@@ -111,4 +112,52 @@ void logData(const char *filename, const String &data,bool serialout) {
     Serial.println("Data written to SD: " + data);
   }
   
+}
+
+void handleWiFiServer() {
+    Serial.println("Woke up to start Wi-Fi server...");
+    WiFi.softAP(ssid, password);
+    Serial.print("Access Point IP: ");
+    Serial.println(WiFi.softAPIP());
+
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
+        String html = "<!DOCTYPE html><html><body>";
+        html += "<h1>ESP32 Form</h1>";
+        html += "<form action='/submit' method='GET'>";
+        html += "Enter Data: <input type='text' name='data'>";
+        html += "<input type='submit' value='Send'>";
+        html += "</form></body></html>";
+        request->send(200, "text/html", html);
+    });
+
+    server.on("/submit", HTTP_GET, [](AsyncWebServerRequest* request) {
+        if (request->hasParam("data")) {
+            receivedData = request->getParam("data")->value();
+            Serial.println("Received Data: " + receivedData);
+        }
+        request->send(200, "text/plain", "Data received: " + receivedData);
+    });
+
+    server.begin();
+    serverActive = true; // Set flag to keep the ESP32 awake
+}
+void handleDataLogging() {
+    Serial.println("Woke up for data logging...");
+    DateTime now = rtc.now();
+    char date[10] = "hh:mm:ss";
+    rtc.now().toString(date);
+
+    char buffer[20];
+    snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
+    char result[50];
+    snprintf(result, sizeof(result), "0.0409 %s %s %d", buffer, date, 12345);
+
+    Serial.println(result);
+    logData("/rain_data.txt", result, true);
+}
+
+void goToSleep() {
+    Serial.println("Entering deep sleep...");
+    delay(1000); // Allow time for Serial logs to complete
+    esp_deep_sleep_start();
 }
