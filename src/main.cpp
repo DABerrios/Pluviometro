@@ -12,7 +12,8 @@
 RTC_DS3231 rtc;
 void logData(const char *filename, const String &data,bool serialout);
 const int LED_BUILTIN = 2;
-#define WAKEUP_PIN GPIO_NUM_34 
+#define WAKEUP_PIN GPIO_NUM_34
+#define WAKEUP_PIN_2_wifi GPIO_NUM_35 
 #define SCK  18
 #define MISO  19
 #define MOSI  23
@@ -32,7 +33,9 @@ void setup() {
         Serial.println("RTC lost power, setting the time...");
         rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
     }
-    
+    //wakeup sources 
+    esp_sleep_enable_ext1_wakeup((1ULL<<WAKEUP_PIN)|(1ULL<<WAKEUP_PIN_2_wifi), ESP_EXT1_WAKEUP_ANY_HIGH);
+
     // Check the wake-up reason
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
     Serial.print("Wakeup reason: ");
@@ -42,9 +45,11 @@ void setup() {
         return;
     }
     Serial.println("SD Card initialized successfully!");
-    if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT0) {
+    if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
+      uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();
+      if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN)){
         Serial.println("Woke up from GPIO HIGH!");
-        // Perform actions upon wake-up
+        // Perform actions upon wake-up for data logging
         DateTime now = rtc.now();
         char date[10] = "hh:mm:ss";
         rtc.now().toString(date);
@@ -57,13 +62,17 @@ void setup() {
         Serial.println(result);
         Serial.println(buffer);
         logData("/rain_data.txt", result, true);
+      }
+      else if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN_2_wifi)){
+        Serial.println("Woke up from GPIO HIGH!");
+        // Perform actions upon wake-up for wifi configuration
         
+      }
     } else {
         Serial.println("Initial boot or not a GPIO wake-up...");
     }
 
-    // Configure the wake-up pin
-    esp_sleep_enable_ext0_wakeup(WAKEUP_PIN, 1);  // Wake up when pin is HIGH
+      // Wake up when pin is HIGH
 
     // Prepare to go back to deep sleep
     Serial.println("Entering deep sleep...");
