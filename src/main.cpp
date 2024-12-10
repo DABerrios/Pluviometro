@@ -30,6 +30,7 @@ const char* ssid = "ESP32_AP";
 const char* password = "12345678";
 //global variable
 int adc_output = 0;
+int RTC_DATA_ATTR num_id = 0;
 // Create an AsyncWebServer object on port 80
 AsyncWebServer server(80);
 // Variable to store received data
@@ -134,6 +135,8 @@ void handleWiFiServer() {
         if (request->hasParam("data")) {
             receivedData = request->getParam("data")->value();
             Serial.println("Received Data: " + receivedData);
+            num_id=receivedData.toInt();
+            Serial.println(num_id);
         }
         request->send(200, "text/plain", "Data received: " + receivedData);
     });
@@ -143,6 +146,7 @@ void handleWiFiServer() {
 }
 void handleDataLogging() {
     Serial.println("Woke up for data logging...");
+    Serial.println("Current num_id: " + String(num_id)); // Debug print
     DateTime now = rtc.now();
     char date[10] = "hh:mm:ss";
     rtc.now().toString(date);
@@ -150,7 +154,7 @@ void handleDataLogging() {
     char buffer[20];
     snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
     char result[50];
-    snprintf(result, sizeof(result), "0.0409 %s %s %d", buffer, date, 12345);
+    snprintf(result, sizeof(result), "0.0409 %s %s %d", buffer, date, num_id);
 
     Serial.println(result);
     logData("/rain_data.txt", result, true);
