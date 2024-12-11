@@ -39,6 +39,8 @@ String receivedData = "";
 // Flag to keep the ESP32 awake when the server is active
 bool serverActive = false;
 void setup() {
+    btStop();
+    esp_wifi_stop();
     Serial.begin(115200);
     delay(1000);  // Give time for Serial monitor to connect
     setCpuFrequencyMhz(80);
@@ -54,6 +56,7 @@ void setup() {
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();
       if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN)){
+        
         if (!rtc.begin()) {
           Serial.println("Couldn't find RTC");
           while (1); // Stop execution here
@@ -129,9 +132,9 @@ void handleWiFiServer() {
 
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
         String html = "<!DOCTYPE html><html><body>";
-        html += "<h1>ESP32 Form</h1>";
+        html += "<h1>Rain gauge config</h1>";
         html += "<form action='/submit' method='GET'>";
-        html += "Enter Data: <input type='text' name='data'>";
+        html += "Enter serial: <input type='text' name='data'>";
         html += "<input type='submit' value='Send'>";
         html += "</form></body></html>";
         request->send(200, "text/html", html);
