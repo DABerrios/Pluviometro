@@ -136,7 +136,12 @@ void handleWiFiServer() {
         html += "<form action='/submit' method='GET'>";
         html += "Enter serial: <input type='text' name='data'>";
         html += "<input type='submit' value='Send'>";
-        html += "</form></body></html>";
+        html += "</form>";
+        html += "<br>";
+        html += "<form action='/request_file' method='GET'>";
+        html += "<button type='submit'>Request File</button>";
+        html += "</form>";
+        html += "</body></html>";
         request->send(200, "text/html", html);
     });
 
@@ -148,6 +153,30 @@ void handleWiFiServer() {
             Serial.println(num_id);
         }
         request->send(200, "text/plain", "Data received: " + receivedData);
+    });
+
+  server.on("/request_file", HTTP_GET, [](AsyncWebServerRequest* request) {
+        if (!SD.begin(CS)) {
+          Serial.println("SD Card initialization failed!");
+          return;
+        }
+        const char* fileName = "/rain_data.txt"; // Replace with your desired file
+        File file = SD.open(fileName);
+        if (!file) {
+            Serial.println("Failed to open file for sending");
+            request->send(500, "text/plain", "Failed to open file");
+            return;
+        }
+
+        String fileContent;
+        while (file.available()) {
+            fileContent += (char)file.read();
+        }
+        file.close();
+
+        Serial.println("File sent to client:");
+        Serial.println(fileContent);
+        request->send(200, "text/plain", fileContent);
     });
 
     server.begin();
