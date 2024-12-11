@@ -5,9 +5,10 @@
 #include <esp_sleep.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-#include <wifi.h>
+#include <WiFi.h>
 #include "FS.h"
 #include "SD.h"
+#include <esp_wifi.h>
 
 #define WAKEUP_PIN GPIO_NUM_34
 #define WAKEUP_PIN_2_wifi GPIO_NUM_35 
@@ -40,15 +41,8 @@ bool serverActive = false;
 void setup() {
     Serial.begin(115200);
     delay(1000);  // Give time for Serial monitor to connect
-    if (!rtc.begin()) {
-        Serial.println("Couldn't find RTC");
-        while (1); // Stop execution here
-    }
+    setCpuFrequencyMhz(80);
     
-    if (rtc.lostPower()) {
-        Serial.println("RTC lost power, setting the time...");
-        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
-    }
     //wakeup sources 
     esp_sleep_enable_ext1_wakeup((1ULL<<WAKEUP_PIN)|(1ULL<<WAKEUP_PIN_2_wifi), ESP_EXT1_WAKEUP_ANY_HIGH);
 
@@ -56,14 +50,24 @@ void setup() {
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
     Serial.print("Wakeup reason: ");
     Serial.println(wakeup_reason);
-    if (!SD.begin(CS)) {
-        Serial.println("SD Card initialization failed!");
-        return;
-    }
-    Serial.println("SD Card initialized successfully!");
+    
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();
       if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN)){
+        if (!rtc.begin()) {
+          Serial.println("Couldn't find RTC");
+          while (1); // Stop execution here
+        }
+    
+        if (rtc.lostPower()) {
+          Serial.println("RTC lost power, setting the time...");
+          rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
+        }
+        if (!SD.begin(CS)) {
+          Serial.println("SD Card initialization failed!");
+          return;
+        }
+        Serial.println("SD Card initialized successfully!");
         handleDataLogging();
         goToSleep();
       }
@@ -85,6 +89,7 @@ void loop() {
             Serial.println("Stopping server and going to sleep...");
             server.end();
             serverActive = false;
+            WiFi.softAPdisconnect(true);
             goToSleep();
         }     
   }
@@ -118,6 +123,7 @@ void logData(const char *filename, const String &data,bool serialout) {
 void handleWiFiServer() {
     Serial.println("Woke up to start Wi-Fi server...");
     WiFi.softAP(ssid, password);
+    WiFi.setSleep(true); // Enable Wi-Fi low-power mode
     Serial.print("Access Point IP: ");
     Serial.println(WiFi.softAPIP());
 
@@ -162,6 +168,8 @@ void handleDataLogging() {
 
 void goToSleep() {
     Serial.println("Entering deep sleep...");
+    WiFi.mode(WIFI_OFF); // Ensure Wi-Fi is off
+    esp_wifi_stop();
     delay(1000); // Allow time for Serial logs to complete
     esp_deep_sleep_start();
 }
