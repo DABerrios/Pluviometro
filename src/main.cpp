@@ -9,6 +9,7 @@
 #include <FS.h>
 #include <SD.h>
 #include <esp_wifi.h>
+#include <SparkFunBME280.h>
 #include <preferences.h>
 
 /* Pin definitions*/
@@ -22,6 +23,10 @@ const int LED_BUILTIN = 2;
 
 /* Create an RTC object */
 RTC_DS3231 rtc;
+
+/* Create a BME280 object */
+BME280 bme;
+BME280_SensorMeasurements sensor_measurements;
 /*function declarations*/
 void logData(const char *filename, const String &data,bool serialout);
 void handleWiFiServer();
@@ -81,6 +86,12 @@ void setup() {
           Serial.println("RTC lost power, setting the time...");// to be removed for final version
           rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
         }
+        // Initialize the BME280 sensor
+        if (bme.beginI2C() == false) {
+          Serial.println("Could not find a valid BME280 sensor, check wiring!");
+          while (1);
+        }
+        Serial.println("BME280 sensor initialized successfully!");// to be removed for final version
         // Initialize SD card
         if (!SD.begin(CS)) {
           Serial.println("SD Card initialization failed!");// to be removed for final version
@@ -261,11 +272,25 @@ void handleDataLogging() {
 
     char buffer[20];
     snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
-    char result[50];
-    snprintf(result, sizeof(result), "0.0409,%s,%s,%d", buffer, date, num_id);
+    char result1[50];
+    snprintf(result1, sizeof(result1), "0.0409,%s,%s,%d", buffer, date, num_id);
 
-    Serial.println(result);// to be removed for final version
-    logData("/rain_data.txt", result, true);
+    while (bme.isMeasuring())
+    {
+    }
+    char result2[100];
+    bme.readAllMeasurements(&sensor_measurements);
+    Serial.print("Pressure: ");
+    Serial.println(sensor_measurements.pressure);
+    Serial.print("Temperature: ");
+    Serial.println(sensor_measurements.temperature);
+    Serial.print("Humidity: ");
+    Serial.println(sensor_measurements.humidity);
+    snprintf(result2, sizeof(result2), "%.2f,%s", sensor_measurements.temperature, result1);
+
+    
+    Serial.println(result2);// to be removed for final version
+    logData("/rain_data.txt", result2, true);
 }
 
 /**
