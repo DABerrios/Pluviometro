@@ -6,9 +6,10 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <WiFi.h>
-#include "FS.h"
-#include "SD.h"
+#include <FS.h>
+#include <SD.h>
 #include <esp_wifi.h>
+#include <preferences.h>
 
 /* Pin definitions*/
 #define WAKEUP_PIN GPIO_NUM_34
@@ -39,6 +40,8 @@ AsyncWebServer server(80);
 String receivedData = "";
 /* Flag to keep the ESP32 awake when the server is active*/
 bool serverActive = false;
+/* Preferences object to store data in the ESP32 flash memory*/
+Preferences preferences;
 void setup() {
     /*disable bluetooth and wifi*/
     btStop();
@@ -58,7 +61,10 @@ void setup() {
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
     Serial.print("Wakeup reason: ");// to be removed for final version
     Serial.println(wakeup_reason);// to be removed for final version
-    
+    /*initialize the preferences object*/
+    preferences.begin("serial_num", false); 
+    /*get the num_id from the preferences object*/
+    num_id = preferences.getInt("num_id", 0);
     /*Check if the wake-up was caused by the GPIO pin*/
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();// Get the wake-up pin
@@ -94,6 +100,15 @@ void setup() {
     } else {
       // This is a fresh boot
         Serial.println("Initial boot or not a GPIO wake-up...");// to be removed for final version
+        if (!rtc.begin()) {
+          Serial.println("Couldn't find RTC");
+          while (1); // Stop execution here
+        }
+        // check if the RTC lost power and if so, set the time
+        if (rtc.lostPower()) {
+          Serial.println("RTC lost power, setting the time...");// to be removed for final version
+          rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
+        }
     }
 
 
@@ -168,16 +183,24 @@ void handleWiFiServer() {
 
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
         String html = "<!DOCTYPE html><html><body>";
-        html += "<h1>Rain gauge config</h1>";
-        html += "<form action='/submit' method='GET'>";
-        html += "Enter serial: <input type='text' name='data'>";
-        html += "<input type='submit' value='Send'>";
-        html += "</form>";
-        html += "<br>";
-        html += "<form action='/request_file' method='GET'>";
+        html += "<h1>Rain Gauge Configuration</h1>";
+
+        if (num_id == 0) {
+            // Show the serial input form if num_id is not set
+            html += "<form action='/submit' method='GET'>";
+            html += "Enter serial: <input type='text' name='data'>";
+            html += "<input type='submit' value='Send'>";
+            html += "</form>";
+        } else {
+            // Display num_id if it's already set
+            html += "<p>Serial ID is already set: " + String(num_id) + "</p>";
+        }
+
+        html += "<br><form action='/request_file' method='GET'>";
         html += "<button type='submit'>Request File</button>";
         html += "</form>";
         html += "</body></html>";
+
         request->send(200, "text/html", html);
     });
 
@@ -187,6 +210,7 @@ void handleWiFiServer() {
             Serial.println("Received Data: " + receivedData);// to be removed for final version
             num_id=receivedData.toInt();
             Serial.println(num_id);// to be removed for final version
+            preferences.putInt("num_id", num_id);
         }
         request->send(200, "text/plain", "Data received: " + receivedData);
     });
@@ -238,7 +262,7 @@ void handleDataLogging() {
     char buffer[20];
     snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
     char result[50];
-    snprintf(result, sizeof(result), "0.0409 %s %s %d", buffer, date, num_id);
+    snprintf(result, sizeof(result), "0.0409,%s,%s,%d", buffer, date, num_id);
 
     Serial.println(result);// to be removed for final version
     logData("/rain_data.txt", result, true);
