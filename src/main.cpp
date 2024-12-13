@@ -19,6 +19,7 @@
 #define MISO  19
 #define MOSI  23
 #define CS  5
+
 const int LED_BUILTIN = 2;
 
 /* Create an RTC object */
@@ -32,6 +33,7 @@ void logData(const char *filename, const String &data,bool serialout);
 void handleWiFiServer();
 void handleDataLogging();
 void goToSleep();
+void bucket_tips();
 
 
 /* Network credentials*/
@@ -39,6 +41,9 @@ const char* ssid = "ESP32_AP";
 const char* password = "12345678";
 /*global variable*/
 int RTC_DATA_ATTR num_id = 0;
+int RTC_DATA_ATTR bucket_tips_counter = 0;
+int RTC_DATA_ATTR sec_to_micro = 1000000;
+int RTC_DATA_ATTR sleep_interval = 60 ;;
 /* Create an AsyncWebServer object on port 80*/
 AsyncWebServer server(80);
 /* Variable to store received data*/
@@ -61,6 +66,7 @@ void setup() {
     
     /*wakeup sources*/ 
     esp_sleep_enable_ext1_wakeup((1ULL<<WAKEUP_PIN)|(1ULL<<WAKEUP_PIN_2_wifi), ESP_EXT1_WAKEUP_ANY_HIGH);
+    esp_sleep_enable_timer_wakeup(sleep_interval* sec_to_micro);
 
     /*Check the wake-up reason*/ 
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
@@ -75,7 +81,18 @@ void setup() {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();// Get the wake-up pin
       /*check if wake up pin is the sensor pin*/
       if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN)){
-        
+        bucket_tips();
+        goToSleep();
+      }
+      /*check if wake up pin is the wifi button pin*/
+      else if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN_2_wifi)){
+        //start the wifi server
+        handleWiFiServer();
+      }
+      
+    }
+    else if(wakeup_reason == ESP_SLEEP_WAKEUP_TIMER){
+      Serial.println("Woke up from timer...");// to be removed for final version
         // check if the RTC is running 
         if (!rtc.begin()) {
           Serial.println("Couldn't find RTC");
@@ -102,13 +119,10 @@ void setup() {
         handleDataLogging();
         //set the ESP32 to deep sleep
         goToSleep();
+      
+        
       }
-      /*check if wake up pin is the wifi button pin*/
-      else if(wakeup_pin_mask & (1ULL<<WAKEUP_PIN_2_wifi)){
-        //start the wifi server
-        handleWiFiServer();
-      }
-    } else {
+     else {
       // This is a fresh boot
         Serial.println("Initial boot or not a GPIO wake-up...");// to be removed for final version
         if (!rtc.begin()) {
@@ -207,6 +221,12 @@ void handleWiFiServer() {
             html += "<p>Serial ID is already set: " + String(num_id) + "</p>";
         }
 
+        html += "<h2>Set Sleep Interval (microseconds)</h2>";
+        html += "<form action='/set_sleep_interval' method='GET'>";
+        html += "Sleep Interval(in s): <input type='text' name='interval' value='" + String(sleep_interval) + "'>";
+        html += "<input type='submit' value='Set'>";
+        html += "</form>";
+
         html += "<br><form action='/request_file' method='GET'>";
         html += "<button type='submit'>Request File</button>";
         html += "</form>";
@@ -226,7 +246,17 @@ void handleWiFiServer() {
         request->send(200, "text/plain", "Data received: " + receivedData);
     });
 
-  server.on("/request_file", HTTP_GET, [](AsyncWebServerRequest* request) {
+    server.on("/set_sleep_interval", HTTP_GET, [](AsyncWebServerRequest* request) {
+        if (request->hasParam("interval")) {
+            String intervalStr = request->getParam("interval")->value();
+            sleep_interval = intervalStr.toInt();
+            Serial.println("Updated sleep interval: " + String(sleep_interval)); // to be removed for final version
+            preferences.putInt("sleep_interval", sleep_interval); // Save to flash
+        }
+        request->send(200, "text/plain", "Sleep interval set to: " + String(sleep_interval) + " microseconds");
+    });
+
+    server.on("/request_file", HTTP_GET, [](AsyncWebServerRequest* request) {
         if (!SD.begin(CS)) {
           Serial.println("SD Card initialization failed!");
           return;
@@ -265,27 +295,22 @@ void handleWiFiServer() {
  */
 void handleDataLogging() {
     Serial.println("Woke up for data logging...");// to be removed for final version
-    Serial.println("Current num_id: " + String(num_id)); // to be removed for final version
     DateTime now = rtc.now();
     char date[10] = "hh:mm:ss";
     rtc.now().toString(date);
 
     char buffer[20];
     snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
+    float rain=0.0;
+    rain=bucket_tips_counter*0.0409;
     char result1[50];
-    snprintf(result1, sizeof(result1), "0.0409,%s,%s,%d", buffer, date, num_id);
+    snprintf(result1, sizeof(result1), "%.4f,%s,%s,%d", rain, buffer, date, num_id);
 
     while (bme.isMeasuring())
     {
     }
     char result2[100];
     bme.readAllMeasurements(&sensor_measurements);
-    Serial.print("Pressure: ");
-    Serial.println(sensor_measurements.pressure);
-    Serial.print("Temperature: ");
-    Serial.println(sensor_measurements.temperature);
-    Serial.print("Humidity: ");
-    Serial.println(sensor_measurements.humidity);
     snprintf(result2, sizeof(result2), "%.2f,%s", sensor_measurements.temperature, result1);
 
     
@@ -306,4 +331,7 @@ void goToSleep() {
     esp_wifi_stop();
     delay(1000); // to be removed for final version
     esp_deep_sleep_start();
+}
+void bucket_tips(){
+  bucket_tips_counter++;  
 }
