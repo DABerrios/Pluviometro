@@ -120,9 +120,10 @@ void setup() {
         Serial.println("Could not find a valid BME280 sensor, check wiring!");
         while (1);
       }
-      bme.setTempOverSample(1);
+      bme.setTempOverSample(16);
       bme.setHumidityOverSample(1);
       bme.setPressureOverSample(1);
+      bme.setMode(MODE_NORMAL);
       
       Serial.println("BME280 sensor initialized successfully!");// to be removed for final version
       // Initialize SD card
