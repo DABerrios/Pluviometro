@@ -11,6 +11,8 @@
 #include <esp_wifi.h>
 #include <SparkFunBME280.h>
 #include <preferences.h>
+#include <SparkFun_ENS160.h>
+#include <SparkFunCCS811.h>
 
 /* Pin definitions*/
 #define WAKEUP_PIN GPIO_NUM_34
@@ -19,6 +21,7 @@
 #define MISO  19
 #define MOSI  23
 #define CS  5
+#define CCS811_ADDR 0x5B
 
 const int LED_BUILTIN = 2;
 
@@ -28,12 +31,14 @@ RTC_DS3231 rtc;
 /* Create a BME280 object */
 BME280 bme;
 BME280_SensorMeasurements sensor_measurements;
+CCS811 ccs811(CCS811_ADDR);
 /*function declarations*/
 void logData(const char *filename, const String &data,bool serialout);
 void handleWiFiServer();
 void handleDataLogging();
 void goToSleep();
 void bucket_tips();
+void IRAM_ATTR ISR();
 
 
 /* Network credentials*/
@@ -42,6 +47,7 @@ const char* password = "12345678";
 /*global variable*/
 int RTC_DATA_ATTR num_id = 0;
 int RTC_DATA_ATTR bucket_tips_counter = 0;
+int bucket_tips_counter_log=0;
 int RTC_DATA_ATTR sec_to_micro = 1000000;
 int RTC_DATA_ATTR sleep_interval = 60 ;;
 unsigned long lastActivityTime = 0; // Timestamp of the last activity
@@ -55,6 +61,7 @@ bool serverActive = false;
 /* Preferences object to store data in the ESP32 flash memory*/
 Preferences preferences;
 void setup() {
+    Wire.begin(21, 22);
     /*disable bluetooth and wifi*/
     btStop();
     esp_wifi_stop();
@@ -97,36 +104,58 @@ void setup() {
     }
     else if(wakeup_reason == ESP_SLEEP_WAKEUP_TIMER){
       Serial.println("Woke up from timer...");// to be removed for final version
-        // check if the RTC is running 
-        if (!rtc.begin()) {
-          Serial.println("Couldn't find RTC");
-          while (1); // Stop execution here
-        }
-        // check if the RTC lost power and if so, set the time
-        if (rtc.lostPower()) {
-          Serial.println("RTC lost power, setting the time...");// to be removed for final version
-          rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
-        }
-        // Initialize the BME280 sensor
-        if (bme.beginI2C() == false) {
-          Serial.println("Could not find a valid BME280 sensor, check wiring!");
-          while (1);
-        }
-        Serial.println("BME280 sensor initialized successfully!");// to be removed for final version
-        // Initialize SD card
-        if (!SD.begin(CS)) {
-          Serial.println("SD Card initialization failed!");// to be removed for final version
-          return;
-        }
-        Serial.println("SD Card initialized successfully!");// to be removed for final version
-        //log the sensor data and time on the sd card
-        handleDataLogging();
-        //set the ESP32 to deep sleep
-        goToSleep();
+      attachInterrupt(34, ISR, HIGH);
+      // check if the RTC is running 
+      if (!rtc.begin()) {
+        Serial.println("Couldn't find RTC");
+        while (1); // Stop execution here
+      }
+      // check if the RTC lost power and if so, set the time
+      if (rtc.lostPower()) {
+        Serial.println("RTC lost power, setting the time...");// to be removed for final version
+        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
+      }
+      // Initialize the BME280 sensor
+      if (bme.beginI2C() == false) {
+        Serial.println("Could not find a valid BME280 sensor, check wiring!");
+        while (1);
+      }
+      bme.setTempOverSample(1);
+      bme.setHumidityOverSample(1);
+      bme.setPressureOverSample(1);
       
+      Serial.println("BME280 sensor initialized successfully!");// to be removed for final version
+      // Initialize SD card
+      if (!SD.begin(CS)) {
+        Serial.println("SD Card initialization failed!");// to be removed for final version
+        return;
+      }
+      Serial.println("SD Card initialized successfully!");// to be removed for final version
+      //log the sensor data and time on the sd card
+      handleDataLogging();
+      bucket_tips_counter=bucket_tips_counter_log;
+      detachInterrupt(34);
+      //set the ESP32 to deep sleep
+      goToSleep();
+    
         
       }
      else {
+      Serial.println("\nI2C Scanner");
+      for (byte address = 1; address < 127; ++address) {
+        Wire.beginTransmission(address);
+        byte error = Wire.endTransmission();
+        if (error == 0) {
+          Serial.print("I2C device found at address 0x");
+          if (address < 16) Serial.print("0");
+          Serial.println(address, HEX);
+        } else if (error == 4) {
+          Serial.print("Unknown error at address 0x");
+          if (address < 16) Serial.print("0");
+          Serial.println(address, HEX);
+        }
+      }
+      Serial.println("Done");
       // This is a fresh boot
         Serial.println("Initial boot or not a GPIO wake-up...");// to be removed for final version
         if (!rtc.begin()) {
@@ -138,6 +167,13 @@ void setup() {
           Serial.println("RTC lost power, setting the time...");// to be removed for final version
           rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));  // Set RTC to compile time
         }
+        if(!ccs811.begin()){
+          Serial.println("CCS811 sensor not found. Please check wiring.");
+          while(1);
+        }
+        ccs811.setDriveMode(0);
+
+           
     }
 
 
@@ -253,7 +289,13 @@ void handleWiFiServer() {
         if (request->hasParam("data")) {
             receivedData = request->getParam("data")->value();
             Serial.println("Received Data: " + receivedData);
-            num_id = receivedData.toInt();
+            if((receivedData.toInt())==0){
+              Serial.println("Invalid serial number");
+              request->send(200, "text/plain", "Invalid serial number");
+            }
+            else{
+              num_id = receivedData.toInt();
+            }
             preferences.putInt("num_id", num_id);
         }
         request->send(200, "text/plain", "Data received: " + receivedData);
@@ -264,7 +306,13 @@ void handleWiFiServer() {
         if (request->hasParam("interval")) {
             String intervalStr = request->getParam("interval")->value();
             Serial.println("Received Sleep Interval: " + intervalStr);
+            if((intervalStr.toInt())==0){
+              Serial.println("Invalid sleep interval");
+              request->send(200, "text/plain", "Invalid sleep interval");
+            }
+            else{
             sleep_interval = intervalStr.toInt();
+            }
             Serial.println("Sleep Interval set to: " + String(sleep_interval) + " seconds");
             preferences.putInt("sleep_interval", sleep_interval); // Save to flash
         }
@@ -355,4 +403,10 @@ void goToSleep() {
  */
 void bucket_tips(){
   bucket_tips_counter++;  
+}
+void bucket_tips_log(){
+  bucket_tips_counter_log++;  
+}
+void IRAM_ATTR ISR() {
+    bucket_tips_log();
 }
