@@ -44,6 +44,8 @@ int RTC_DATA_ATTR num_id = 0;
 int RTC_DATA_ATTR bucket_tips_counter = 0;
 int RTC_DATA_ATTR sec_to_micro = 1000000;
 int RTC_DATA_ATTR sleep_interval = 60 ;;
+unsigned long lastActivityTime = 0; // Timestamp of the last activity
+const unsigned long TIMEOUT_PERIOD = 5 * 60 * 1000; // 5 minutes in milliseconds
 /* Create an AsyncWebServer object on port 80*/
 AsyncWebServer server(80);
 /* Variable to store received data*/
@@ -72,10 +74,12 @@ void setup() {
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
     Serial.print("Wakeup reason: ");// to be removed for final version
     Serial.println(wakeup_reason);// to be removed for final version
-    /*initialize the preferences object*/
-    preferences.begin("serial_num", false); 
-    /*get the num_id from the preferences object*/
+    /*initialize the preferences objects*/
+    preferences.begin("serial_num", false);
+    preferences.begin("sleep_interval", false); 
+    /*get data from the preferences objects*/
     num_id = preferences.getInt("num_id", 0);
+    sleep_interval = preferences.getInt("sleep_interval", 60);
     /*Check if the wake-up was caused by the GPIO pin*/
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();// Get the wake-up pin
@@ -142,6 +146,14 @@ void setup() {
 
 void loop() {
   if (serverActive) {
+    // Check for timeout
+        if (millis() - lastActivityTime > TIMEOUT_PERIOD) {
+            Serial.println("Timeout reached. Stopping server and going to sleep...");
+            server.end();
+            serverActive = false;
+            WiFi.softAPdisconnect(true);
+            goToSleep();
+        }
     // Check if the wifi wakeup pin is pressed again to stop the server and sleep
     if (digitalRead(WAKEUP_PIN_2_wifi) == HIGH) {
             Serial.println("Stopping server and going to sleep...");// to be removed for final version
@@ -196,6 +208,7 @@ void logData(const char *filename, const String &data,bool serialout) {
  * - "/" : Serves an HTML form for rain gauge configuration.
  * - "/submit" : Receives data from the HTML form and prints it to the Serial monitor.
  * - "/request_file" : Sends the content of a specified file from the SD card to the client.
+ * - "/set_sleep_interval" : Sets the sleep interval for the ESP32.
  * 
  * The function also enables Wi-Fi low-power mode and prints the access point IP address to the Serial monitor.
  */
@@ -205,7 +218,7 @@ void handleWiFiServer() {
     WiFi.setSleep(true); // Enable Wi-Fi low-power mode
     Serial.print("Access Point IP: ");// to be removed for final version
     Serial.println(WiFi.softAPIP());// to be removed for final version
-
+    lastActivityTime = millis();// Update the last activity time
     server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
         String html = "<!DOCTYPE html><html><body>";
         html += "<h1>Rain Gauge Configuration</h1>";
@@ -221,9 +234,9 @@ void handleWiFiServer() {
             html += "<p>Serial ID is already set: " + String(num_id) + "</p>";
         }
 
-        html += "<h2>Set Sleep Interval (microseconds)</h2>";
+        html += "<h2>Set Sleep Interval (seconds)</h2>";
         html += "<form action='/set_sleep_interval' method='GET'>";
-        html += "Sleep Interval(in s): <input type='text' name='interval' value='" + String(sleep_interval) + "'>";
+        html += "Sleep Interval: <input type='text' name='interval' value='" + String(sleep_interval) + "'>";
         html += "<input type='submit' value='Set'>";
         html += "</form>";
 
@@ -236,35 +249,37 @@ void handleWiFiServer() {
     });
 
     server.on("/submit", HTTP_GET, [](AsyncWebServerRequest* request) {
+        lastActivityTime = millis(); // Reset timeout on activity
         if (request->hasParam("data")) {
             receivedData = request->getParam("data")->value();
-            Serial.println("Received Data: " + receivedData);// to be removed for final version
-            num_id=receivedData.toInt();
-            Serial.println(num_id);// to be removed for final version
+            Serial.println("Received Data: " + receivedData);
+            num_id = receivedData.toInt();
             preferences.putInt("num_id", num_id);
         }
         request->send(200, "text/plain", "Data received: " + receivedData);
     });
 
     server.on("/set_sleep_interval", HTTP_GET, [](AsyncWebServerRequest* request) {
+        lastActivityTime = millis(); // Reset timeout on activity
         if (request->hasParam("interval")) {
             String intervalStr = request->getParam("interval")->value();
+            Serial.println("Received Sleep Interval: " + intervalStr);
             sleep_interval = intervalStr.toInt();
-            Serial.println("Updated sleep interval: " + String(sleep_interval)); // to be removed for final version
+            Serial.println("Sleep Interval set to: " + String(sleep_interval) + " seconds");
             preferences.putInt("sleep_interval", sleep_interval); // Save to flash
         }
-        request->send(200, "text/plain", "Sleep interval set to: " + String(sleep_interval) + " microseconds");
+        request->send(200, "text/plain", "Sleep interval set to: " + String(sleep_interval) + " seconds");
     });
 
     server.on("/request_file", HTTP_GET, [](AsyncWebServerRequest* request) {
+        lastActivityTime = millis(); // Reset timeout on activity
         if (!SD.begin(CS)) {
-          Serial.println("SD Card initialization failed!");
-          return;
+            Serial.println("SD Card initialization failed!");
+            return;
         }
-        const char* fileName = "/rain_data.txt"; // File to send
+        const char* fileName = "/rain_data.txt";
         File file = SD.open(fileName);
         if (!file) {
-            Serial.println("Failed to open file for sending"); // to be removed for final version
             request->send(500, "text/plain", "Failed to open file");
             return;
         }
@@ -275,13 +290,12 @@ void handleWiFiServer() {
         }
         file.close();
 
-        Serial.println("File sent to client:");// to be removed for final version
-        Serial.println(fileContent);// to be removed for final version
         request->send(200, "text/plain", fileContent);
     });
 
     server.begin();
-    serverActive = true; // Set flag to keep the ESP32 awake
+    serverActive = true;
+    lastActivityTime = millis(); // Reset activity timestamp
 }
 /**
  * @brief Handles the data logging process.
@@ -303,6 +317,7 @@ void handleDataLogging() {
     snprintf(buffer, sizeof(buffer), "%02d/%02d/%04d", now.day(), now.month(), now.year());
     float rain=0.0;
     rain=bucket_tips_counter*0.0409;
+    bucket_tips_counter=0;
     char result1[50];
     snprintf(result1, sizeof(result1), "%.4f,%s,%s,%d", rain, buffer, date, num_id);
 
@@ -332,6 +347,12 @@ void goToSleep() {
     delay(1000); // to be removed for final version
     esp_deep_sleep_start();
 }
+/**
+ * @brief counts the number of bucket tips of the rain gauge.
+ * 
+ * this function increments the bucket_tips_counter variable by 1.
+ * 
+ */
 void bucket_tips(){
   bucket_tips_counter++;  
 }
