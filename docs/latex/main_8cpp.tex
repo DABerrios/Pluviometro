@@ -1,0 +1,377 @@
+\doxysection{src/main.cpp File Reference}
+\hypertarget{main_8cpp}{}\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$Wire.\+h$>$}\newline
+{\ttfamily \#include $<$SPI.\+h$>$}\newline
+{\ttfamily \#include $<$RTClib.\+h$>$}\newline
+{\ttfamily \#include $<$esp\+\_\+sleep.\+h$>$}\newline
+{\ttfamily \#include $<$Async\+TCP.\+h$>$}\newline
+{\ttfamily \#include $<$ESPAsync\+Web\+Server.\+h$>$}\newline
+{\ttfamily \#include $<$Wi\+Fi.\+h$>$}\newline
+{\ttfamily \#include $<$FS.\+h$>$}\newline
+{\ttfamily \#include $<$SD.\+h$>$}\newline
+{\ttfamily \#include $<$esp\+\_\+wifi.\+h$>$}\newline
+{\ttfamily \#include $<$Spark\+Fun\+BME280.\+h$>$}\newline
+{\ttfamily \#include $<$preferences.\+h$>$}\newline
+{\ttfamily \#include $<$Spark\+Fun\+\_\+\+ENS160.\+h$>$}\newline
+{\ttfamily \#include $<$Spark\+Fun\+CCS811.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8cpp_ac7b56a7e55221f8b95af7d07bd2185c7}{WAKEUP\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+34
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a1533dfce7630ed4ffc372772e8e3899a}{WAKEUP\+\_\+\+PIN\+\_\+2\+\_\+wifi}}~GPIO\+\_\+\+NUM\+\_\+35
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a2dd443a4430713d325ab86895a4a45eb}{SCK}}~18
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a7334c540878c8c4d801fd75ed9fd8063}{MISO}}~19
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a5d3f11f2fdf8a7e27b975291e0c2c8cc}{MOSI}}~23
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a3780e2fe762dc532df7d0f030b55caa0}{CS}}~5
+\item 
+\#define \mbox{\hyperlink{main_8cpp_a4c3a63d41818b1c52526d478881f1403}{CCS811\+\_\+\+ADDR}}~0x5B
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+CCS811 \mbox{\hyperlink{main_8cpp_a014936ebceddd1d71bcebda0d15b8075}{ccs811}} (\mbox{\hyperlink{main_8cpp_a4c3a63d41818b1c52526d478881f1403}{CCS811\+\_\+\+ADDR}})
+\item 
+void \mbox{\hyperlink{main_8cpp_abef06e3b619f047a7b59887b28b33c6e}{log\+Data}} (const char \texorpdfstring{$\ast$}{*}filename, const String \&data, bool serialout)
+\begin{DoxyCompactList}\small\item\em Logs data to an SD card file and optionally outputs to the serial monitor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_a9d7eff099181f8ab48d175d12e3171c4}{handle\+Wi\+Fi\+Server}} ()
+\begin{DoxyCompactList}\small\item\em Initializes and handles the Wi-\/\+Fi server. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_a9f9d0ca80f41782edf366170577a124e}{handle\+Data\+Logging}} ()
+\begin{DoxyCompactList}\small\item\em Handles the data logging process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_ae2da94e03570cd696d5e1ef31169b6f3}{go\+To\+Sleep}} ()
+\begin{DoxyCompactList}\small\item\em Puts the device into deep sleep mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_abe87ef16aaf84b82d35566c519f789ef}{bucket\+\_\+tips}} ()
+\begin{DoxyCompactList}\small\item\em counts the number of bucket tips of the rain gauge. \end{DoxyCompactList}\item 
+void IRAM\+\_\+\+ATTR \mbox{\hyperlink{main_8cpp_addd4b4572dcd9663471534593634caac}{ISR}} ()
+\begin{DoxyCompactList}\small\item\em Interrupt Service Routine (ISR) for handling bucket tips. \end{DoxyCompactList}\item 
+Async\+Web\+Server \mbox{\hyperlink{main_8cpp_a85f30d66aa1231313c8553fd485b22b1}{server}} (80)
+\item 
+void \mbox{\hyperlink{main_8cpp_a4fc01d736fe50cf5b977f755b675f11d}{setup}} ()
+\begin{DoxyCompactList}\small\item\em Setup function for initializing the ESP32 and peripherals. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\begin{DoxyCompactList}\small\item\em Main loop function that handles server activity and power management. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8cpp_a416b4746bdf23249a26b1d9149208f85}{bucket\+\_\+tips\+\_\+log}} ()
+\begin{DoxyCompactList}\small\item\em counts the number of bucket tips of the rain gauge. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \mbox{\hyperlink{main_8cpp_a8603b3fef2feef8e4fa66e6312573833}{LED\+\_\+\+BUILTIN}} = 2
+\item 
+RTC\+\_\+\+DS3231 \mbox{\hyperlink{main_8cpp_afa042f998806fcdedab1794cebbeaad3}{rtc}}
+\item 
+BME280 \mbox{\hyperlink{main_8cpp_a3a9531ed9fc8f7ade958fdd5d056a19f}{bme}}
+\item 
+BME280\+\_\+\+Sensor\+Measurements \mbox{\hyperlink{main_8cpp_a07880eee04a4168b266ea444e7faf21e}{sensor\+\_\+measurements}}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_a587ba0cb07f02913598610049a3bbb79}{ssid}} = "{}ESP32\+\_\+\+AP"{}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{main_8cpp_aa4a2ebcb494493f648ae1e6975672575}{password}} = "{}12345678"{}
+\item 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR \mbox{\hyperlink{main_8cpp_a3eeb80a02a2c4e1b5c56f3ab29822ba1}{num\+\_\+id}} = 0
+\item 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR \mbox{\hyperlink{main_8cpp_ae789355b7f9c3fc734ba4f80938780fc}{bucket\+\_\+tips\+\_\+counter}} = 0
+\item 
+int \mbox{\hyperlink{main_8cpp_af865f24a1d57da1153c934c95951b23d}{bucket\+\_\+tips\+\_\+counter\+\_\+log}} =0
+\item 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR \mbox{\hyperlink{main_8cpp_ad6d607c9a1b9a6bda0c4bb6a93c6d8ee}{sec\+\_\+to\+\_\+micro}} = 1000000
+\item 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR \mbox{\hyperlink{main_8cpp_a447f9d5cca0f85dddba722a8efcd33bd}{sleep\+\_\+interval}} = 60
+\item 
+unsigned long \mbox{\hyperlink{main_8cpp_a94f69c5109e8c3076144a0ab061802fb}{last\+Activity\+Time}} = 0
+\item 
+const unsigned long \mbox{\hyperlink{main_8cpp_a879d8144bd009607e59d2d2773dd7328}{TIMEOUT\+\_\+\+PERIOD}} = 5 \texorpdfstring{$\ast$}{*} 60 \texorpdfstring{$\ast$}{*} 1000
+\item 
+String \mbox{\hyperlink{main_8cpp_a216440c31f6a2648df8cd21b5270bc3c}{received\+Data}} = "{}"{}
+\item 
+bool \mbox{\hyperlink{main_8cpp_a1c8389f6f5355f81caf8ec47cedb9dd9}{server\+Active}} = false
+\item 
+Preferences \mbox{\hyperlink{main_8cpp_a6ea06cf7b8092a0adaf07614d7ece59d}{preferences}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{main_8cpp_a4c3a63d41818b1c52526d478881f1403}\index{main.cpp@{main.cpp}!CCS811\_ADDR@{CCS811\_ADDR}}
+\index{CCS811\_ADDR@{CCS811\_ADDR}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{CCS811\_ADDR}{CCS811\_ADDR}}
+{\footnotesize\ttfamily \label{main_8cpp_a4c3a63d41818b1c52526d478881f1403} 
+\#define CCS811\+\_\+\+ADDR~0x5B}
+
+\Hypertarget{main_8cpp_a3780e2fe762dc532df7d0f030b55caa0}\index{main.cpp@{main.cpp}!CS@{CS}}
+\index{CS@{CS}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{CS}{CS}}
+{\footnotesize\ttfamily \label{main_8cpp_a3780e2fe762dc532df7d0f030b55caa0} 
+\#define CS~5}
+
+\Hypertarget{main_8cpp_a7334c540878c8c4d801fd75ed9fd8063}\index{main.cpp@{main.cpp}!MISO@{MISO}}
+\index{MISO@{MISO}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{MISO}{MISO}}
+{\footnotesize\ttfamily \label{main_8cpp_a7334c540878c8c4d801fd75ed9fd8063} 
+\#define MISO~19}
+
+\Hypertarget{main_8cpp_a5d3f11f2fdf8a7e27b975291e0c2c8cc}\index{main.cpp@{main.cpp}!MOSI@{MOSI}}
+\index{MOSI@{MOSI}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{MOSI}{MOSI}}
+{\footnotesize\ttfamily \label{main_8cpp_a5d3f11f2fdf8a7e27b975291e0c2c8cc} 
+\#define MOSI~23}
+
+\Hypertarget{main_8cpp_a2dd443a4430713d325ab86895a4a45eb}\index{main.cpp@{main.cpp}!SCK@{SCK}}
+\index{SCK@{SCK}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{SCK}{SCK}}
+{\footnotesize\ttfamily \label{main_8cpp_a2dd443a4430713d325ab86895a4a45eb} 
+\#define SCK~18}
+
+\Hypertarget{main_8cpp_ac7b56a7e55221f8b95af7d07bd2185c7}\index{main.cpp@{main.cpp}!WAKEUP\_PIN@{WAKEUP\_PIN}}
+\index{WAKEUP\_PIN@{WAKEUP\_PIN}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{WAKEUP\_PIN}{WAKEUP\_PIN}}
+{\footnotesize\ttfamily \label{main_8cpp_ac7b56a7e55221f8b95af7d07bd2185c7} 
+\#define WAKEUP\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+34}
+
+\Hypertarget{main_8cpp_a1533dfce7630ed4ffc372772e8e3899a}\index{main.cpp@{main.cpp}!WAKEUP\_PIN\_2\_wifi@{WAKEUP\_PIN\_2\_wifi}}
+\index{WAKEUP\_PIN\_2\_wifi@{WAKEUP\_PIN\_2\_wifi}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{WAKEUP\_PIN\_2\_wifi}{WAKEUP\_PIN\_2\_wifi}}
+{\footnotesize\ttfamily \label{main_8cpp_a1533dfce7630ed4ffc372772e8e3899a} 
+\#define WAKEUP\+\_\+\+PIN\+\_\+2\+\_\+wifi~GPIO\+\_\+\+NUM\+\_\+35}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8cpp_abe87ef16aaf84b82d35566c519f789ef}\index{main.cpp@{main.cpp}!bucket\_tips@{bucket\_tips}}
+\index{bucket\_tips@{bucket\_tips}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{bucket\_tips()}{bucket\_tips()}}
+{\footnotesize\ttfamily \label{main_8cpp_abe87ef16aaf84b82d35566c519f789ef} 
+void bucket\+\_\+tips (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+counts the number of bucket tips of the rain gauge. 
+
+this function increments the bucket\+\_\+tips\+\_\+counter variable by 1. \Hypertarget{main_8cpp_a416b4746bdf23249a26b1d9149208f85}\index{main.cpp@{main.cpp}!bucket\_tips\_log@{bucket\_tips\_log}}
+\index{bucket\_tips\_log@{bucket\_tips\_log}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{bucket\_tips\_log()}{bucket\_tips\_log()}}
+{\footnotesize\ttfamily \label{main_8cpp_a416b4746bdf23249a26b1d9149208f85} 
+void bucket\+\_\+tips\+\_\+log (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+counts the number of bucket tips of the rain gauge. 
+
+this function increments the bucket\+\_\+tips\+\_\+counter variable by 1. \Hypertarget{main_8cpp_a014936ebceddd1d71bcebda0d15b8075}\index{main.cpp@{main.cpp}!ccs811@{ccs811}}
+\index{ccs811@{ccs811}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{ccs811()}{ccs811()}}
+{\footnotesize\ttfamily \label{main_8cpp_a014936ebceddd1d71bcebda0d15b8075} 
+CCS811 ccs811 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{main_8cpp_a4c3a63d41818b1c52526d478881f1403}{CCS811\+\_\+\+ADDR}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_ae2da94e03570cd696d5e1ef31169b6f3}\index{main.cpp@{main.cpp}!goToSleep@{goToSleep}}
+\index{goToSleep@{goToSleep}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{goToSleep()}{goToSleep()}}
+{\footnotesize\ttfamily \label{main_8cpp_ae2da94e03570cd696d5e1ef31169b6f3} 
+void go\+To\+Sleep (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Puts the device into deep sleep mode. 
+
+This function performs the necessary steps to put the device into deep sleep mode. It turns off the Wi-\/\+Fi to save power, stops the Wi-\/\+Fi driver, and starts the deep sleep mode. \Hypertarget{main_8cpp_a9f9d0ca80f41782edf366170577a124e}\index{main.cpp@{main.cpp}!handleDataLogging@{handleDataLogging}}
+\index{handleDataLogging@{handleDataLogging}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{handleDataLogging()}{handleDataLogging()}}
+{\footnotesize\ttfamily \label{main_8cpp_a9f9d0ca80f41782edf366170577a124e} 
+void handle\+Data\+Logging (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Handles the data logging process. 
+
+This function is responsible for logging data when the system wakes up. Retrieves the current date and time from the RTC, formats the date and time, and logs the datam to a specified file.
+
+The logged data includes thetemperatur,the amount of rain, the current date, time, and a numerical identifier. \Hypertarget{main_8cpp_a9d7eff099181f8ab48d175d12e3171c4}\index{main.cpp@{main.cpp}!handleWiFiServer@{handleWiFiServer}}
+\index{handleWiFiServer@{handleWiFiServer}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{handleWiFiServer()}{handleWiFiServer()}}
+{\footnotesize\ttfamily \label{main_8cpp_a9d7eff099181f8ab48d175d12e3171c4} 
+void handle\+Wi\+Fi\+Server (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes and handles the Wi-\/\+Fi server. 
+
+This function sets up the Wi-\/\+Fi access point, configures the server routes, and handles incoming HTTP requests. It also enables Wi-\/\+Fi low-\/power mode and updates the last activity time.
+
+Routes\+:
+\begin{DoxyItemize}
+\item "{}/"{} (GET)\+: Displays the main configuration page with options to set the serial ID and sleep interval.
+\item "{}/submit"{} (GET)\+: Receives and processes the serial ID input from the user.
+\item "{}/set\+\_\+sleep\+\_\+interval"{} (GET)\+: Receives and sets the sleep interval input from the user.
+\item "{}/request\+\_\+file"{} (GET)\+: Reads and sends the content of the "{}rain\+\_\+data.\+txt"{} file from the SD card. 
+\end{DoxyItemize}\Hypertarget{main_8cpp_addd4b4572dcd9663471534593634caac}\index{main.cpp@{main.cpp}!ISR@{ISR}}
+\index{ISR@{ISR}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{ISR()}{ISR()}}
+{\footnotesize\ttfamily \label{main_8cpp_addd4b4572dcd9663471534593634caac} 
+void IRAM\+\_\+\+ATTR ISR (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Interrupt Service Routine (ISR) for handling bucket tips. 
+
+This function is marked with IRAM\+\_\+\+ATTR to ensure it is placed in the IRAM (Instruction RAM) for faster execution. It is triggered by an interrupt and calls the \doxylink{main_8cpp_a416b4746bdf23249a26b1d9149208f85}{bucket\+\_\+tips\+\_\+log()} function to log the bucket tips. \Hypertarget{main_8cpp_abef06e3b619f047a7b59887b28b33c6e}\index{main.cpp@{main.cpp}!logData@{logData}}
+\index{logData@{logData}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{logData()}{logData()}}
+{\footnotesize\ttfamily \label{main_8cpp_abef06e3b619f047a7b59887b28b33c6e} 
+void log\+Data (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{, }\item[{const String \&}]{data}{, }\item[{bool}]{serialout}{}\end{DoxyParamCaption})}
+
+
+
+Logs data to an SD card file and optionally outputs to the serial monitor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file to write to on the SD card. \\
+\hline
+{\em data} & The data to be written to the file. \\
+\hline
+{\em serialout} & If true, outputs status messages to the serial monitor. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8cpp_afe461d27b9c48d5921c00d521181f12f}\index{main.cpp@{main.cpp}!loop@{loop}}
+\index{loop@{loop}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily \label{main_8cpp_afe461d27b9c48d5921c00d521181f12f} 
+void loop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Main loop function that handles server activity and power management. 
+
+This function continuously checks the status of the server and manages power consumption. If the server is active, it checks for a timeout or a wakeup pin press to stop the server and put the device to sleep. If the server is not active, it puts the device to sleep immediately. \Hypertarget{main_8cpp_a85f30d66aa1231313c8553fd485b22b1}\index{main.cpp@{main.cpp}!server@{server}}
+\index{server@{server}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{server()}{server()}}
+{\footnotesize\ttfamily \label{main_8cpp_a85f30d66aa1231313c8553fd485b22b1} 
+Async\+Web\+Server server (\begin{DoxyParamCaption}\item[{80}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8cpp_a4fc01d736fe50cf5b977f755b675f11d}\index{main.cpp@{main.cpp}!setup@{setup}}
+\index{setup@{setup}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}}
+{\footnotesize\ttfamily \label{main_8cpp_a4fc01d736fe50cf5b977f755b675f11d} 
+void setup (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Setup function for initializing the ESP32 and peripherals. 
+
+This function performs the following tasks\+:
+\begin{DoxyItemize}
+\item Initializes the I2C communication on specified pins.
+\item Disables Bluetooth and Wi\+Fi to save power.
+\item Initializes the Serial communication for debugging purposes.
+\item Sets the CPU frequency to 80MHz.
+\item Configures wakeup sources for deep sleep.
+\item Checks the wakeup reason and handles accordingly\+:
+\begin{DoxyItemize}
+\item If woken up by GPIO pin, checks which pin caused the wakeup and handles sensor or Wi\+Fi server.
+\item If woken up by timer, initializes RTC, BME280 sensor, and SD card, then logs data.
+\item If initial boot or not a GPIO wakeup, scans I2C devices and initializes RTC and CCS811 sensor.
+\end{DoxyItemize}
+\item Initializes preferences to store and retrieve data.
+\item Logs wakeup reason and other debug information to Serial (to be removed in final version). 
+\end{DoxyItemize}
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8cpp_a3a9531ed9fc8f7ade958fdd5d056a19f}\index{main.cpp@{main.cpp}!bme@{bme}}
+\index{bme@{bme}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{bme}{bme}}
+{\footnotesize\ttfamily \label{main_8cpp_a3a9531ed9fc8f7ade958fdd5d056a19f} 
+BME280 bme}
+
+\Hypertarget{main_8cpp_ae789355b7f9c3fc734ba4f80938780fc}\index{main.cpp@{main.cpp}!bucket\_tips\_counter@{bucket\_tips\_counter}}
+\index{bucket\_tips\_counter@{bucket\_tips\_counter}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{bucket\_tips\_counter}{bucket\_tips\_counter}}
+{\footnotesize\ttfamily \label{main_8cpp_ae789355b7f9c3fc734ba4f80938780fc} 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR bucket\+\_\+tips\+\_\+counter = 0}
+
+\Hypertarget{main_8cpp_af865f24a1d57da1153c934c95951b23d}\index{main.cpp@{main.cpp}!bucket\_tips\_counter\_log@{bucket\_tips\_counter\_log}}
+\index{bucket\_tips\_counter\_log@{bucket\_tips\_counter\_log}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{bucket\_tips\_counter\_log}{bucket\_tips\_counter\_log}}
+{\footnotesize\ttfamily \label{main_8cpp_af865f24a1d57da1153c934c95951b23d} 
+int bucket\+\_\+tips\+\_\+counter\+\_\+log =0}
+
+\Hypertarget{main_8cpp_a94f69c5109e8c3076144a0ab061802fb}\index{main.cpp@{main.cpp}!lastActivityTime@{lastActivityTime}}
+\index{lastActivityTime@{lastActivityTime}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{lastActivityTime}{lastActivityTime}}
+{\footnotesize\ttfamily \label{main_8cpp_a94f69c5109e8c3076144a0ab061802fb} 
+unsigned long last\+Activity\+Time = 0}
+
+\Hypertarget{main_8cpp_a8603b3fef2feef8e4fa66e6312573833}\index{main.cpp@{main.cpp}!LED\_BUILTIN@{LED\_BUILTIN}}
+\index{LED\_BUILTIN@{LED\_BUILTIN}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{LED\_BUILTIN}{LED\_BUILTIN}}
+{\footnotesize\ttfamily \label{main_8cpp_a8603b3fef2feef8e4fa66e6312573833} 
+const int LED\+\_\+\+BUILTIN = 2}
+
+\Hypertarget{main_8cpp_a3eeb80a02a2c4e1b5c56f3ab29822ba1}\index{main.cpp@{main.cpp}!num\_id@{num\_id}}
+\index{num\_id@{num\_id}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{num\_id}{num\_id}}
+{\footnotesize\ttfamily \label{main_8cpp_a3eeb80a02a2c4e1b5c56f3ab29822ba1} 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR num\+\_\+id = 0}
+
+\Hypertarget{main_8cpp_aa4a2ebcb494493f648ae1e6975672575}\index{main.cpp@{main.cpp}!password@{password}}
+\index{password@{password}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{password}{password}}
+{\footnotesize\ttfamily \label{main_8cpp_aa4a2ebcb494493f648ae1e6975672575} 
+const char\texorpdfstring{$\ast$}{*} password = "{}12345678"{}}
+
+\Hypertarget{main_8cpp_a6ea06cf7b8092a0adaf07614d7ece59d}\index{main.cpp@{main.cpp}!preferences@{preferences}}
+\index{preferences@{preferences}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{preferences}{preferences}}
+{\footnotesize\ttfamily \label{main_8cpp_a6ea06cf7b8092a0adaf07614d7ece59d} 
+Preferences preferences}
+
+\Hypertarget{main_8cpp_a216440c31f6a2648df8cd21b5270bc3c}\index{main.cpp@{main.cpp}!receivedData@{receivedData}}
+\index{receivedData@{receivedData}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{receivedData}{receivedData}}
+{\footnotesize\ttfamily \label{main_8cpp_a216440c31f6a2648df8cd21b5270bc3c} 
+String received\+Data = "{}"{}}
+
+\Hypertarget{main_8cpp_afa042f998806fcdedab1794cebbeaad3}\index{main.cpp@{main.cpp}!rtc@{rtc}}
+\index{rtc@{rtc}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{rtc}{rtc}}
+{\footnotesize\ttfamily \label{main_8cpp_afa042f998806fcdedab1794cebbeaad3} 
+RTC\+\_\+\+DS3231 rtc}
+
+\Hypertarget{main_8cpp_ad6d607c9a1b9a6bda0c4bb6a93c6d8ee}\index{main.cpp@{main.cpp}!sec\_to\_micro@{sec\_to\_micro}}
+\index{sec\_to\_micro@{sec\_to\_micro}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{sec\_to\_micro}{sec\_to\_micro}}
+{\footnotesize\ttfamily \label{main_8cpp_ad6d607c9a1b9a6bda0c4bb6a93c6d8ee} 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR sec\+\_\+to\+\_\+micro = 1000000}
+
+\Hypertarget{main_8cpp_a07880eee04a4168b266ea444e7faf21e}\index{main.cpp@{main.cpp}!sensor\_measurements@{sensor\_measurements}}
+\index{sensor\_measurements@{sensor\_measurements}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{sensor\_measurements}{sensor\_measurements}}
+{\footnotesize\ttfamily \label{main_8cpp_a07880eee04a4168b266ea444e7faf21e} 
+BME280\+\_\+\+Sensor\+Measurements sensor\+\_\+measurements}
+
+\Hypertarget{main_8cpp_a1c8389f6f5355f81caf8ec47cedb9dd9}\index{main.cpp@{main.cpp}!serverActive@{serverActive}}
+\index{serverActive@{serverActive}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{serverActive}{serverActive}}
+{\footnotesize\ttfamily \label{main_8cpp_a1c8389f6f5355f81caf8ec47cedb9dd9} 
+bool server\+Active = false}
+
+\Hypertarget{main_8cpp_a447f9d5cca0f85dddba722a8efcd33bd}\index{main.cpp@{main.cpp}!sleep\_interval@{sleep\_interval}}
+\index{sleep\_interval@{sleep\_interval}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{sleep\_interval}{sleep\_interval}}
+{\footnotesize\ttfamily \label{main_8cpp_a447f9d5cca0f85dddba722a8efcd33bd} 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR sleep\+\_\+interval = 60}
+
+\Hypertarget{main_8cpp_a587ba0cb07f02913598610049a3bbb79}\index{main.cpp@{main.cpp}!ssid@{ssid}}
+\index{ssid@{ssid}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{ssid}{ssid}}
+{\footnotesize\ttfamily \label{main_8cpp_a587ba0cb07f02913598610049a3bbb79} 
+const char\texorpdfstring{$\ast$}{*} ssid = "{}ESP32\+\_\+\+AP"{}}
+
+\Hypertarget{main_8cpp_a879d8144bd009607e59d2d2773dd7328}\index{main.cpp@{main.cpp}!TIMEOUT\_PERIOD@{TIMEOUT\_PERIOD}}
+\index{TIMEOUT\_PERIOD@{TIMEOUT\_PERIOD}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{TIMEOUT\_PERIOD}{TIMEOUT\_PERIOD}}
+{\footnotesize\ttfamily \label{main_8cpp_a879d8144bd009607e59d2d2773dd7328} 
+const unsigned long TIMEOUT\+\_\+\+PERIOD = 5 \texorpdfstring{$\ast$}{*} 60 \texorpdfstring{$\ast$}{*} 1000}
+

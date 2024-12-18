@@ -28,10 +28,17 @@ const int LED_BUILTIN = 2;
 /* Create an RTC object */
 RTC_DS3231 rtc;
 
-/* Create a BME280 object */
+
+
+/* Create objetcs for the sensors*/
 BME280 bme;
 BME280_SensorMeasurements sensor_measurements;
+/**
+ * @var ccs811
+ * @brief CCS811 sensor object instantiated with the I2C address.
+ */
 CCS811 ccs811(CCS811_ADDR);
+
 /*function declarations*/
 void logData(const char *filename, const String &data,bool serialout);
 void handleWiFiServer();
@@ -44,6 +51,7 @@ void IRAM_ATTR ISR();
 /* Network credentials*/
 const char* ssid = "ESP32_AP";
 const char* password = "12345678";
+
 /*global variable*/
 int RTC_DATA_ATTR num_id = 0;
 int RTC_DATA_ATTR bucket_tips_counter = 0;
@@ -52,14 +60,39 @@ int RTC_DATA_ATTR sec_to_micro = 1000000;
 int RTC_DATA_ATTR sleep_interval = 60 ;;
 unsigned long lastActivityTime = 0; // Timestamp of the last activity
 const unsigned long TIMEOUT_PERIOD = 5 * 60 * 1000; // 5 minutes in milliseconds
+
 /* Create an AsyncWebServer object on port 80*/
+/**
+ * @var server
+ * @brief AsyncWebServer object instantiated on port 80.
+ */
 AsyncWebServer server(80);
+
 /* Variable to store received data*/
 String receivedData = "";
+
 /* Flag to keep the ESP32 awake when the server is active*/
 bool serverActive = false;
+
 /* Preferences object to store data in the ESP32 flash memory*/
 Preferences preferences;
+
+/**
+ * @brief Setup function for initializing the ESP32 and peripherals.
+ * 
+ * This function performs the following tasks:
+ * - Initializes the I2C communication on specified pins.
+ * - Disables Bluetooth and WiFi to save power.
+ * - Initializes the Serial communication for debugging purposes.
+ * - Sets the CPU frequency to 80MHz.
+ * - Configures wakeup sources for deep sleep.
+ * - Checks the wakeup reason and handles accordingly:
+ *   - If woken up by GPIO pin, checks which pin caused the wakeup and handles sensor or WiFi server.
+ *   - If woken up by timer, initializes RTC, BME280 sensor, and SD card, then logs data.
+ *   - If initial boot or not a GPIO wakeup, scans I2C devices and initializes RTC and CCS811 sensor.
+ * - Initializes preferences to store and retrieve data.
+ * - Logs wakeup reason and other debug information to Serial (to be removed in final version).
+ */
 void setup() {
     Wire.begin(21, 22);
     /*disable bluetooth and wifi*/
@@ -181,6 +214,14 @@ void setup() {
     
 }
 
+/**
+ * @brief Main loop function that handles server activity and power management.
+ * 
+ * This function continuously checks the status of the server and manages power consumption.
+ * If the server is active, it checks for a timeout or a wakeup pin press to stop the server and put the device to sleep.
+ * If the server is not active, it puts the device to sleep immediately.
+ * 
+ */
 void loop() {
   if (serverActive) {
     // Check for timeout
@@ -235,20 +276,20 @@ void logData(const char *filename, const String &data,bool serialout) {
   
 }
 
+
 /**
  * @brief Initializes and handles the Wi-Fi server.
  * 
- * This function sets up the ESP32 as a Wi-Fi access point and starts an asynchronous web server.
- * It defines routes for handling HTTP GET requests to serve an HTML form, receive data, and send a file from the SD card.
+ * This function sets up the Wi-Fi access point, configures the server routes, and handles incoming HTTP requests.
+ * It also enables Wi-Fi low-power mode and updates the last activity time.
  * 
  * Routes:
- * - "/" : Serves an HTML form for rain gauge configuration.
- * - "/submit" : Receives data from the HTML form and prints it to the Serial monitor.
- * - "/request_file" : Sends the content of a specified file from the SD card to the client.
- * - "/set_sleep_interval" : Sets the sleep interval for the ESP32.
+ * - "/" (GET): Displays the main configuration page with options to set the serial ID and sleep interval.
+ * - "/submit" (GET): Receives and processes the serial ID input from the user.
+ * - "/set_sleep_interval" (GET): Receives and sets the sleep interval input from the user.
+ * - "/request_file" (GET): Reads and sends the content of the "rain_data.txt" file from the SD card.
  * 
- * The function also enables Wi-Fi low-power mode and prints the access point IP address to the Serial monitor.
- */
+  */
 void handleWiFiServer() {
     Serial.println("Woke up to start Wi-Fi server...");// to be removed for final version
     WiFi.softAP(ssid, password);
@@ -351,9 +392,9 @@ void handleWiFiServer() {
  *
  * This function is responsible for logging data when the system wakes up.
  * Retrieves the current date and time from the RTC, formats the date
- * and time, and logs the datamto a specified file.
+ * and time, and logs the datam to a specified file.
  *
- * The logged data includes a fixed value, the current date, time, and a
+ * The logged data includes thetemperatur,the amount of rain, the current date, time, and a
  * numerical identifier.
  */
 void handleDataLogging() {
@@ -405,9 +446,23 @@ void goToSleep() {
 void bucket_tips(){
   bucket_tips_counter++;  
 }
+/**
+ * @brief counts the number of bucket tips of the rain gauge.
+ * 
+ * this function increments the bucket_tips_counter variable by 1.
+ * 
+ */
 void bucket_tips_log(){
   bucket_tips_counter_log++;  
 }
+/**
+ * @brief Interrupt Service Routine (ISR) for handling bucket tips.
+ * 
+ * This function is marked with IRAM_ATTR to ensure it is placed in 
+ * the IRAM (Instruction RAM) for faster execution. It is triggered 
+ * by an interrupt and calls the bucket_tips_log() function to log 
+ * the bucket tips.
+ */
 void IRAM_ATTR ISR() {
     bucket_tips_log();
 }
