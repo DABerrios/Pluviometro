@@ -1,6 +1,7 @@
 #include <Arduino.h>
-#include <Wire.h>
+
 #include <SPI.h>
+#include <Wire.h>
 #include <RTClib.h>
 #include <esp_sleep.h>
 #include <AsyncTCP.h>
@@ -11,8 +12,13 @@
 #include <esp_wifi.h>
 #include <SparkFunBME280.h>
 #include <preferences.h>
-#include <SparkFun_ENS160.h>
 #include <SparkFunCCS811.h>
+#include <DallasTemperature.h>
+//#include <OneWire.h>
+
+#include <lora.h>
+#include <main.h>
+
 
 /* Pin definitions*/
 #define WAKEUP_PIN GPIO_NUM_34
@@ -23,12 +29,16 @@
 #define CS  5
 #define CCS811_ADDR 0x5B
 
+
+
+
 const int LED_BUILTIN = 2;
+
+
+
 
 /* Create an RTC object */
 RTC_DS3231 rtc;
-
-
 
 /* Create objetcs for the sensors*/
 BME280 bme;
@@ -38,14 +48,9 @@ BME280_SensorMeasurements sensor_measurements;
  * @brief CCS811 sensor object instantiated with the I2C address.
  */
 CCS811 ccs811(CCS811_ADDR);
+//OneWire oneWire(33);
 
-/*function declarations*/
-void logData(const char *filename, const String &data,bool serialout);
-void handleWiFiServer();
-void handleDataLogging();
-void goToSleep();
-void bucket_tips();
-void IRAM_ATTR ISR();
+
 
 
 /* Network credentials*/
@@ -74,8 +79,11 @@ String receivedData = "";
 /* Flag to keep the ESP32 awake when the server is active*/
 bool serverActive = false;
 
+
 /* Preferences object to store data in the ESP32 flash memory*/
 Preferences preferences;
+/* Create a DallasTemperature object*/
+//DallasTemperature ds18b20(&oneWire);
 
 /**
  * @brief Setup function for initializing the ESP32 and peripherals.
@@ -114,12 +122,15 @@ void setup() {
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
     Serial.print("Wakeup reason: ");// to be removed for final version
     Serial.println(wakeup_reason);// to be removed for final version
+
     /*initialize the preferences objects*/
     preferences.begin("serial_num", false);
     preferences.begin("sleep_interval", false); 
+
     /*get data from the preferences objects*/
     num_id = preferences.getInt("num_id", 0);
     sleep_interval = preferences.getInt("sleep_interval", 60);
+
     /*Check if the wake-up was caused by the GPIO pin*/
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
       uint64_t wakeup_pin_mask = esp_sleep_get_ext1_wakeup_status();// Get the wake-up pin
@@ -175,7 +186,7 @@ void setup() {
         
       }
      else {
-      Serial.println("\nI2C Scanner");
+      /*Serial.println("\nI2C Scanner");
       for (byte address = 1; address < 127; ++address) {
         Wire.beginTransmission(address);
         byte error = Wire.endTransmission();
@@ -189,7 +200,7 @@ void setup() {
           Serial.println(address, HEX);
         }
       }
-      Serial.println("Done");
+      Serial.println("Done");*/
       // This is a fresh boot
         Serial.println("Initial boot or not a GPIO wake-up...");// to be removed for final version
         if (!rtc.begin()) {
@@ -203,8 +214,10 @@ void setup() {
         }
         if(!ccs811.begin()){
           Serial.println("CCS811 sensor not found. Please check wiring.");
-          while(1);
+          while(1);        
+
         }
+        loraWAN_test();
         ccs811.setDriveMode(0);
 
            
@@ -240,6 +253,10 @@ void loop() {
             WiFi.softAPdisconnect(true);
             goToSleep();
         }     
+  }
+  else if(loraWANActive){
+    os_runloop_once();
+    //loraWANActive = false;
   }
   else{
     // If the server is not active, go to sleep
@@ -364,23 +381,24 @@ void handleWiFiServer() {
     server.on("/request_file", HTTP_GET, [](AsyncWebServerRequest* request) {
         lastActivityTime = millis(); // Reset timeout on activity
         if (!SD.begin(CS)) {
-            Serial.println("SD Card initialization failed!");
-            return;
-        }
+        Serial.println("SD Card initialization failed!");// to be removed for final version
+        return;
+      }
+        // Open file
         const char* fileName = "/rain_data.txt";
         File file = SD.open(fileName);
         if (!file) {
             request->send(500, "text/plain", "Failed to open file");
             return;
         }
+        Serial.println("Reading file: " + String(fileName));
 
-        String fileContent;
-        while (file.available()) {
-            fileContent += (char)file.read();
-        }
+        // Stream file to response to prevent watchdog from triggering
+        AsyncWebServerResponse *response = request->beginResponse(SD, fileName, "text/plain");
+        request->send(response);
+
         file.close();
-
-        request->send(200, "text/plain", fileContent);
+        Serial.println("File sent");
     });
 
     server.begin();
@@ -417,7 +435,10 @@ void handleDataLogging() {
     char result2[100];
     bme.readAllMeasurements(&sensor_measurements);
     snprintf(result2, sizeof(result2), "%.2f,%s", sensor_measurements.temperature, result1);
-
+    //ds18b20.begin();
+    //ds18b20.requestTemperatures();
+    //float temp = ds18b20.getTempCByIndex(0);
+    //Serial.println(temp);
     
     Serial.println(result2);// to be removed for final version
     logData("/rain_data.txt", result2, true);
@@ -466,3 +487,56 @@ void bucket_tips_log(){
 void IRAM_ATTR ISR() {
     bucket_tips_log();
 }
+/*
+void LoRaWAN(){
+  // LMIC init
+  os_init();
+  // Reset the MAC state. Session and pending data transfers will be discarded.
+  LMIC_reset();
+  
+  LMIC_setLinkCheckMode(0);
+  LMIC_setDrTxpow(DR_SF7, SX1276_RST); // Set data rate and power
+  LMIC_startJoining(); // Join LoRaWAN network
+  if (LMIC.devaddr != 0)
+  {
+    Send_Data_LoRa();
+  }
+}
+void Send_Data_LoRa(){
+  if(!SD.begin(CS)){
+    Serial.println("SD Card initialization failed!");
+    return;
+  }
+  File file = SD.open("/rain_data.txt");
+  if (!file) {
+    Serial.println("Failed to open file for reading");
+    return;
+  }
+  if(file){
+    String payload="";
+    while (file.available()){
+      String line=file.readStringUntil('\n');
+      line.trim();
+
+    if (payload.length() + line.length() + 1 > 51){
+      LMIC_setTxData2(1, (uint8_t*)payload.c_str(), payload.length(), 0);
+      while(LMIC.opmode & OP_TXRXPEND){
+        os_runloop_once();
+      }
+      payload="";
+      delay(1000);
+    }
+
+    if (payload.length() > 0){
+      payload += "\n";
+    }
+    payload += line;
+    }
+    if (payload.length() > 0){
+      LMIC_setTxData2(1, (uint8_t*)payload.c_str(), payload.length(), 0);
+    }
+    file.close();
+  }else{
+    Serial.println("Error opening file for reading");
+  }
+}*/
