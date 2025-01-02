@@ -4,19 +4,17 @@
 #include <lora.h>
 #include <main.h>
 
-#define SX1276_SCK 25
-#define SX1276_MISO 26
-#define SX1276_MOSI 27
-#define SX1276_NSS 14
-#define SX1276_RST 12
-#define SX1276_DIO0 32
-#define SX1276_DIO1 13
+
+
 
 /*LoraWAN*/
+
+
 
 static const PROGMEM u1_t NWKSKEY[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const PROGMEM u1_t APPSKEY[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const u4_t DEVADDR = 0x00000000;
+
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
@@ -39,7 +37,6 @@ int RTC_DATA_ATTR last_line = 0;
 void loraWAN_test() {
     Serial.println(F("Starting LoRaWAN..."));
     loraWANActive = true;
-    SPI.begin(SX1276_SCK,SX1276_MISO ,SX1276_MOSI );
     os_init();
     Serial.println(F("LMIC init done!"));
     LMIC_reset();
@@ -157,6 +154,12 @@ void onEvent (ev_t ev) {
     }
 }
 void sendDataFromFile(const char* filename) {
+    if (!SD.begin(SD_CS, vspi))
+    {
+        Serial.println(F("SD Card initialization failed!"));// to be removed for final version
+        return;
+    }
+    
     File file = SD.open(filename);
     if (!file) {
         Serial.println(F("Failed to open file"));
@@ -167,14 +170,13 @@ void sendDataFromFile(const char* filename) {
         file.seek(position);
             }
     if (file.peek() == '\n') {
-    goToSleep();
+        goToSleep();
     }
     while (file.available()) {
         uint8_t data[51]={0};
         size_t dataSize =0;
         while (file.available() && dataSize < 51)
-        {       
-        
+        {               
             String line =file.readStringUntil('\n');
             uint8_t tempData[10];
             size_t lineSize = Lineprocessing(line, tempData);
@@ -191,13 +193,14 @@ void sendDataFromFile(const char* filename) {
         
     
         if (dataSize > 0) {
-            LMIC_setTxData2(1, data, dataSize, 0);
+            //LMIC_setTxData2(1, data, dataSize, 0);
             Serial.println(F("Packet queued"));// to be removed for final version
         }
         // Wait for TX_COMPLETE event before sending next packet
-        while (LMIC.opmode & OP_TXRXPEND) {
-            os_runloop_once();
-        }
+        //while (LMIC.opmode & OP_TXRXPEND) {
+         //   os_runloop_once();
+        //}
+        //saveLastPosition(file.position());
     }
     file.close();
 }
@@ -215,23 +218,25 @@ size_t Lineprocessing(const String &line, uint8_t* data){
     uint16_t timeInt = hour * 3600 + minute * 60 + second;           //
     uint16_t idInt = (uint16_t)id; 
 
-    Serial.print("Temp: ");Serial.println(tempInt);// to be removed for final version
+    /*Serial.print("Temp: ");Serial.println(tempInt);// to be removed for final version
     Serial.print("Rain: ");Serial.println(rainInt);// to be removed for final version
     Serial.print("Date: ");Serial.println(dateInt);// to be removed for final version
     Serial.print("Time: ");Serial.println(timeInt);// to be removed for final version
     Serial.print("ID: ");Serial.println(idInt);// to be removed for final version
+    */
 
     size_t index = 0;
     data[index++] = tempInt >> 8;     
     data[index++] = tempInt & 0xFF;  
-    data[index++] = rainInt;         
+    data[index++] = rainInt >> 8;
+    data[index++] = rainInt & 0xFF;         
     data[index++] = dateInt >> 8;    
     data[index++] = dateInt & 0xFF;  
     data[index++] = timeInt >> 8;    
     data[index++] = timeInt & 0xFF;  
     data[index++] = idInt >> 8;      
     data[index++] = idInt & 0xFF;
-
+    //Serial.print("Index: ");Serial.println(index);// to be removed for final version
     return index;
 
 }
@@ -241,5 +246,5 @@ void saveLastPosition(unsigned long position) {
 }
 void readLastPosition() {
     preferences.begin("last_line", false);
-    last_line = preferences.getInt("last_line", 0);
+    //last_line = preferences.getInt("last_line", 0);
 }
