@@ -42,6 +42,8 @@ int bucket_tips_counter_log=0;
 int RTC_DATA_ATTR sec_to_micro = 1000000;
 int RTC_DATA_ATTR sleep_interval = 60 ;;
 uint32_t RTC_DATA_ATTR rain_reset_timer = 0;
+int RTC_DATA_ATTR sleep_counter = 0;
+int RTC_DATA_ATTR sleep_counter_limit = 10;
 
 float temp102;
 
@@ -87,7 +89,8 @@ void setup() {
     digitalWrite(SD_CS, HIGH);
     /*wakeup sources*/ 
     esp_sleep_enable_ext1_wakeup((1ULL<<WAKEUP_PIN)|(1ULL<<WAKEUP_PIN_2_wifi), ESP_EXT1_WAKEUP_ANY_HIGH);
-    esp_sleep_enable_timer_wakeup(sleep_interval* sec_to_micro);
+    esp_sleep_enable_timer_wakeup(sleep_interval * sec_to_micro);
+
 
     /*Check the wake-up reason*/ 
     esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
@@ -136,6 +139,11 @@ void setup() {
       //log the sensor data and time on the sd card
       handleDataLogging();
       bucket_tips_counter=bucket_tips_counter_log;
+      sleep_counter++;
+      if(sleep_counter>=sleep_counter_limit){
+        sleep_counter=0;
+        loraWAN_config_and_transmition();
+      }
       detachInterrupt(34);
       //set the ESP32 to deep sleep
       digitalWrite(SD_CS, HIGH);
