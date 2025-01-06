@@ -1,0 +1,142 @@
+\doxysection{src/temp\+\_\+sens.cpp File Reference}
+\hypertarget{temp__sens_8cpp}{}\label{temp__sens_8cpp}\index{src/temp\_sens.cpp@{src/temp\_sens.cpp}}
+{\ttfamily \#include $<$temp\+\_\+sens.\+h$>$}\newline
+{\ttfamily \#include $<$main.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{temp__sens_8cpp_aaf07d8b44b2b45df0080a5a6600969bb}{temp\+\_\+102\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the TMP102 temperature sensor. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{temp__sens_8cpp_aaee9da2ed62f287687c864ea164f0ba4}{temp\+\_\+102\+\_\+read}} ()
+\begin{DoxyCompactList}\small\item\em Reads the temperature from the TMP102 sensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{temp__sens_8cpp_aa89175185660772694d9a0536e373179}{temp\+\_\+\+BME280\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the BME280 sensor with specific settings. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{temp__sens_8cpp_a7eea01317ba4a44c925e4fc14e87998f}{temp\+\_\+\+BME280\+\_\+read\+\_\+temp}} ()
+\begin{DoxyCompactList}\small\item\em Reads the temperature from the BME280 sensor. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{temp__sens_8cpp_a7a1e00e0eed6aa0c7d1369aecc176653}{temp\+\_\+\+BME280\+\_\+read\+\_\+pressure}} ()
+\begin{DoxyCompactList}\small\item\em Reads the pressure from the BME280 sensor. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{temp__sens_8cpp_a1d5c2b3e99dd1c7fcea03e8b388a4285}{temp\+\_\+\+BME280\+\_\+read\+\_\+humidity}} ()
+\begin{DoxyCompactList}\small\item\em Reads the humidity from the BME280 sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+TMP102 \mbox{\hyperlink{temp__sens_8cpp_a3bdbc95861ca8941a150049dfeac0c55}{sensor\+\_\+tmp102}}
+\item 
+BME280 \mbox{\hyperlink{temp__sens_8cpp_a75a0bc76f325a47ca03592f316649347}{sensor\+\_\+bme208}}
+\item 
+BME280\+\_\+\+Sensor\+Measurements \mbox{\hyperlink{temp__sens_8cpp_ab1ba6593ea1d40d5d142682897b68a63}{sensor\+\_\+\+BME280\+\_\+measurements}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{temp__sens_8cpp_aaf07d8b44b2b45df0080a5a6600969bb}\index{temp\_sens.cpp@{temp\_sens.cpp}!temp\_102\_init@{temp\_102\_init}}
+\index{temp\_102\_init@{temp\_102\_init}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{temp\_102\_init()}{temp\_102\_init()}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_aaf07d8b44b2b45df0080a5a6600969bb} 
+void temp\+\_\+102\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the TMP102 temperature sensor. 
+
+This function initializes the TMP102 temperature sensor by setting up the necessary configurations. It checks if the sensor can connect, and if not, it prints an error message and enters an infinite loop. The function sets the number of consecutive faults before triggering an alert, the alert polarity to active HIGH, the alert mode to comparator mode, and the low and high temperature settings. Finally, it wakes up the TMP102 sensor.
+
+\begin{DoxyNote}{Note}
+The low temperature setting is 60°C and the high temperature setting is 61°C. 
+\end{DoxyNote}
+\Hypertarget{temp__sens_8cpp_aaee9da2ed62f287687c864ea164f0ba4}\index{temp\_sens.cpp@{temp\_sens.cpp}!temp\_102\_read@{temp\_102\_read}}
+\index{temp\_102\_read@{temp\_102\_read}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{temp\_102\_read()}{temp\_102\_read()}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_aaee9da2ed62f287687c864ea164f0ba4} 
+float temp\+\_\+102\+\_\+read (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Reads the temperature from the TMP102 sensor. 
+
+This function reads the temperature in degrees Celsius from the TMP102 sensor and returns it as a float value.
+
+\begin{DoxyReturn}{Returns}
+float The temperature in degrees Celsius. 
+\end{DoxyReturn}
+\Hypertarget{temp__sens_8cpp_aa89175185660772694d9a0536e373179}\index{temp\_sens.cpp@{temp\_sens.cpp}!temp\_BME280\_init@{temp\_BME280\_init}}
+\index{temp\_BME280\_init@{temp\_BME280\_init}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{temp\_BME280\_init()}{temp\_BME280\_init()}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_aa89175185660772694d9a0536e373179} 
+void temp\+\_\+\+BME280\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the BME280 sensor with specific settings. 
+
+This function sets up the BME280 sensor by configuring various parameters such as reference pressure, filter, mode, oversampling rates for pressure, humidity, and temperature, and standby time. If the sensor cannot be connected, the function will print an error message and enter an infinite loop to halt further execution.
+
+\begin{DoxyNote}{Note}
+The function assumes that the sensor\+\_\+bme208 object has been properly instantiated and is accessible within the scope of this function. 
+\end{DoxyNote}
+\Hypertarget{temp__sens_8cpp_a1d5c2b3e99dd1c7fcea03e8b388a4285}\index{temp\_sens.cpp@{temp\_sens.cpp}!temp\_BME280\_read\_humidity@{temp\_BME280\_read\_humidity}}
+\index{temp\_BME280\_read\_humidity@{temp\_BME280\_read\_humidity}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{temp\_BME280\_read\_humidity()}{temp\_BME280\_read\_humidity()}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_a1d5c2b3e99dd1c7fcea03e8b388a4285} 
+float temp\+\_\+\+BME280\+\_\+read\+\_\+humidity (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Reads the humidity from the BME280 sensor. 
+
+This function waits until the BME280 sensor has finished measuring, then reads all measurements from the sensor and returns the humidity value.
+
+\begin{DoxyReturn}{Returns}
+The humidity value read from the BME280 sensor. 
+\end{DoxyReturn}
+\Hypertarget{temp__sens_8cpp_a7a1e00e0eed6aa0c7d1369aecc176653}\index{temp\_sens.cpp@{temp\_sens.cpp}!temp\_BME280\_read\_pressure@{temp\_BME280\_read\_pressure}}
+\index{temp\_BME280\_read\_pressure@{temp\_BME280\_read\_pressure}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{temp\_BME280\_read\_pressure()}{temp\_BME280\_read\_pressure()}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_a7a1e00e0eed6aa0c7d1369aecc176653} 
+float temp\+\_\+\+BME280\+\_\+read\+\_\+pressure (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Reads the pressure from the BME280 sensor. 
+
+This function waits until the BME280 sensor has finished measuring, then reads all measurements from the sensor and extracts the pressure value.
+
+\begin{DoxyReturn}{Returns}
+The pressure value read from the BME280 sensor. 
+\end{DoxyReturn}
+\Hypertarget{temp__sens_8cpp_a7eea01317ba4a44c925e4fc14e87998f}\index{temp\_sens.cpp@{temp\_sens.cpp}!temp\_BME280\_read\_temp@{temp\_BME280\_read\_temp}}
+\index{temp\_BME280\_read\_temp@{temp\_BME280\_read\_temp}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{temp\_BME280\_read\_temp()}{temp\_BME280\_read\_temp()}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_a7eea01317ba4a44c925e4fc14e87998f} 
+float temp\+\_\+\+BME280\+\_\+read\+\_\+temp (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Reads the temperature from the BME280 sensor. 
+
+This function waits until the BME280 sensor has finished measuring, then reads all measurements from the sensor and returns the temperature.
+
+\begin{DoxyReturn}{Returns}
+The temperature measured by the BME280 sensor. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{temp__sens_8cpp_a75a0bc76f325a47ca03592f316649347}\index{temp\_sens.cpp@{temp\_sens.cpp}!sensor\_bme208@{sensor\_bme208}}
+\index{sensor\_bme208@{sensor\_bme208}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{sensor\_bme208}{sensor\_bme208}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_a75a0bc76f325a47ca03592f316649347} 
+BME280 sensor\+\_\+bme208}
+
+\Hypertarget{temp__sens_8cpp_ab1ba6593ea1d40d5d142682897b68a63}\index{temp\_sens.cpp@{temp\_sens.cpp}!sensor\_BME280\_measurements@{sensor\_BME280\_measurements}}
+\index{sensor\_BME280\_measurements@{sensor\_BME280\_measurements}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{sensor\_BME280\_measurements}{sensor\_BME280\_measurements}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_ab1ba6593ea1d40d5d142682897b68a63} 
+BME280\+\_\+\+Sensor\+Measurements sensor\+\_\+\+BME280\+\_\+measurements}
+
+\Hypertarget{temp__sens_8cpp_a3bdbc95861ca8941a150049dfeac0c55}\index{temp\_sens.cpp@{temp\_sens.cpp}!sensor\_tmp102@{sensor\_tmp102}}
+\index{sensor\_tmp102@{sensor\_tmp102}!temp\_sens.cpp@{temp\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{sensor\_tmp102}{sensor\_tmp102}}
+{\footnotesize\ttfamily \label{temp__sens_8cpp_a3bdbc95861ca8941a150049dfeac0c55} 
+TMP102 sensor\+\_\+tmp102}
+

@@ -1,0 +1,35 @@
+\doxysection{wifi\+\_\+ap\+\_\+serv.\+h}
+\hypertarget{wifi__ap__serv_8h_source}{}\label{wifi__ap__serv_8h_source}\index{include/wifi\_ap\_serv.h@{include/wifi\_ap\_serv.h}}
+\mbox{\hyperlink{wifi__ap__serv_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ WIFI\_AP\_SERV\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ WIFI\_AP\_SERV\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <AsyncTCP.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <ESPAsyncWebServer.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <WiFi.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <esp\_wifi.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{/*\ Create\ an\ AsyncWebServer\ object\ on\ port\ 80*/}}
+\DoxyCodeLine{00015\ \textcolor{keyword}{extern}\ AsyncWebServer\ \mbox{\hyperlink{wifi__ap__serv_8h_a56916c67f21f332014c1c19b200d45f3}{server}};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{/*\ Variable\ to\ store\ received\ data*/}}
+\DoxyCodeLine{00018\ \textcolor{keyword}{extern}\ String\ \mbox{\hyperlink{wifi__ap__serv_8h_a216440c31f6a2648df8cd21b5270bc3c}{receivedData}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/*\ Flag\ to\ keep\ the\ ESP32\ awake\ when\ the\ server\ is\ active*/}}
+\DoxyCodeLine{00021\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{wifi__ap__serv_8h_a1c8389f6f5355f81caf8ec47cedb9dd9}{serverActive}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{/*\ Network\ credentials*/}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{wifi__ap__serv_8h_a587ba0cb07f02913598610049a3bbb79}{ssid}};}
+\DoxyCodeLine{00025\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \mbox{\hyperlink{wifi__ap__serv_8h_aa4a2ebcb494493f648ae1e6975672575}{password}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{/*\ Timestamp\ of\ the\ last\ activity*/}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{wifi__ap__serv_8h_a94f69c5109e8c3076144a0ab061802fb}{lastActivityTime}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{wifi__ap__serv_8h_a879d8144bd009607e59d2d2773dd7328}{TIMEOUT\_PERIOD}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{wifi__ap__serv_8h_a9d7eff099181f8ab48d175d12e3171c4}{handleWiFiServer}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*WIFI\_AP\_SERV\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

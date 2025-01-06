@@ -13,10 +13,9 @@
  * @return void
  */
 void SD_init(){
-    vspi.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
-    pinMode(SD_CS, OUTPUT);
-    digitalWrite(SD_CS, HIGH);
-    if (!SD.begin(SD_CS, vspi))
+    
+    
+    if (!SD.begin(SD_CS,SPI2))
     {
         Serial.println("SD Card Mount Failed");
         return;

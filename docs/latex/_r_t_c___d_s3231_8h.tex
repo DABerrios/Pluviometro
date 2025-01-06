@@ -1,0 +1,82 @@
+\doxysection{include/\+RTC\+\_\+\+DS3231.h File Reference}
+\hypertarget{_r_t_c___d_s3231_8h}{}\label{_r_t_c___d_s3231_8h}\index{include/RTC\_DS3231.h@{include/RTC\_DS3231.h}}
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$RTClib.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_r_t_c___d_s3231_8h_afd522e1615ce58a62a9e5592d420aed2}{RTC\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the RTC (Real-\/\+Time Clock) module. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_r_t_c___d_s3231_8h_af8cc1a8094db9e1dbf3e0429e6d2e72a}{RTC\+\_\+power\+\_\+loss}} ()
+\begin{DoxyCompactList}\small\item\em Checks if the RTC (Real-\/\+Time Clock) has lost power and adjusts the time if necessary. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_r_t_c___d_s3231_8h_aa456a606cd7c2083bbf6e0e9362e4290}{RTC\+\_\+get\+\_\+time}} (char \texorpdfstring{$\ast$}{*}time)
+\begin{DoxyCompactList}\small\item\em Retrieves the current time from the RTC and stores it in the provided buffer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_r_t_c___d_s3231_8h_a12b9822aed3ad4c1c9ce1d8f7de8994a}{RTC\+\_\+get\+\_\+date}} (char \texorpdfstring{$\ast$}{*}date)
+\begin{DoxyCompactList}\small\item\em Retrieves the current date from the RTC and formats it as a string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+RTC\+\_\+\+DS3231 \mbox{\hyperlink{_r_t_c___d_s3231_8h_afa042f998806fcdedab1794cebbeaad3}{rtc}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_r_t_c___d_s3231_8h_a12b9822aed3ad4c1c9ce1d8f7de8994a}\index{RTC\_DS3231.h@{RTC\_DS3231.h}!RTC\_get\_date@{RTC\_get\_date}}
+\index{RTC\_get\_date@{RTC\_get\_date}!RTC\_DS3231.h@{RTC\_DS3231.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_get\_date()}{RTC\_get\_date()}}
+{\footnotesize\ttfamily \label{_r_t_c___d_s3231_8h_a12b9822aed3ad4c1c9ce1d8f7de8994a} 
+void RTC\+\_\+get\+\_\+date (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{date}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the current date from the RTC and formats it as a string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em date} & A character array where the formatted date string will be stored. The date will be formatted as "{}\+DD/\+MM/\+YYYY"{}. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_r_t_c___d_s3231_8h_aa456a606cd7c2083bbf6e0e9362e4290}\index{RTC\_DS3231.h@{RTC\_DS3231.h}!RTC\_get\_time@{RTC\_get\_time}}
+\index{RTC\_get\_time@{RTC\_get\_time}!RTC\_DS3231.h@{RTC\_DS3231.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_get\_time()}{RTC\_get\_time()}}
+{\footnotesize\ttfamily \label{_r_t_c___d_s3231_8h_aa456a606cd7c2083bbf6e0e9362e4290} 
+void RTC\+\_\+get\+\_\+time (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{time}{}\end{DoxyParamCaption})}
+
+
+
+Retrieves the current time from the RTC and stores it in the provided buffer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & A character array where the current time will be stored as a string. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_r_t_c___d_s3231_8h_afd522e1615ce58a62a9e5592d420aed2}\index{RTC\_DS3231.h@{RTC\_DS3231.h}!RTC\_init@{RTC\_init}}
+\index{RTC\_init@{RTC\_init}!RTC\_DS3231.h@{RTC\_DS3231.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_init()}{RTC\_init()}}
+{\footnotesize\ttfamily \label{_r_t_c___d_s3231_8h_afd522e1615ce58a62a9e5592d420aed2} 
+void RTC\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the RTC (Real-\/\+Time Clock) module. 
+
+This function attempts to initialize the RTC module. If the initialization fails, it prints an error message to the serial monitor and halts the execution indefinitely. \Hypertarget{_r_t_c___d_s3231_8h_af8cc1a8094db9e1dbf3e0429e6d2e72a}\index{RTC\_DS3231.h@{RTC\_DS3231.h}!RTC\_power\_loss@{RTC\_power\_loss}}
+\index{RTC\_power\_loss@{RTC\_power\_loss}!RTC\_DS3231.h@{RTC\_DS3231.h}}
+\doxysubsubsection{\texorpdfstring{RTC\_power\_loss()}{RTC\_power\_loss()}}
+{\footnotesize\ttfamily \label{_r_t_c___d_s3231_8h_af8cc1a8094db9e1dbf3e0429e6d2e72a} 
+void RTC\+\_\+power\+\_\+loss (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Checks if the RTC (Real-\/\+Time Clock) has lost power and adjusts the time if necessary. 
+
+This function checks if the RTC has lost power using the {\ttfamily lost\+Power()} method. If the RTC has lost power, it prints a message to the serial monitor (for debugging purposes) and sets the RTC to the compile time using the {\ttfamily adjust()} method with the current date and time. 
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{_r_t_c___d_s3231_8h_afa042f998806fcdedab1794cebbeaad3}\index{RTC\_DS3231.h@{RTC\_DS3231.h}!rtc@{rtc}}
+\index{rtc@{rtc}!RTC\_DS3231.h@{RTC\_DS3231.h}}
+\doxysubsubsection{\texorpdfstring{rtc}{rtc}}
+{\footnotesize\ttfamily \label{_r_t_c___d_s3231_8h_afa042f998806fcdedab1794cebbeaad3} 
+RTC\+\_\+\+DS3231 rtc\hspace{0.3cm}{\ttfamily [extern]}}
+

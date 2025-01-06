@@ -10,10 +10,10 @@
 #define SX1276_SCK 18
 #define SX1276_MISO 19
 #define SX1276_MOSI 23
-#define SX1276_NSS 5
-#define SX1276_RST 12
+#define SX1276_NSS 2
+#define SX1276_RST 25
 #define SX1276_DIO0 32
-#define SX1276_DIO1 13
+#define SX1276_DIO1 26
 
 extern bool loraWANActive;
 extern Preferences preferences;

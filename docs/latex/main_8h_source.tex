@@ -1,0 +1,37 @@
+\doxysection{main.\+h}
+\hypertarget{main_8h_source}{}\label{main_8h_source}\index{include/main.h@{include/main.h}}
+\mbox{\hyperlink{main_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MAIN\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MAIN\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <SPI.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <Preferences.h>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{comment}{/*\ Pin\ definitions*/}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ WAKEUP\_PIN\ GPIO\_NUM\_34}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ WAKEUP\_PIN\_2\_wifi\ GPIO\_NUM\_35\ }}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ SD\_SCK\ 25}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ SD\_MISO\ 26}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ SD\_MOSI\ 27}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ SD\_CS\ 14}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ CCS811\_ADDR\ 0x5B}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/*function\ declarations*/}}
+\DoxyCodeLine{00019\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_abef06e3b619f047a7b59887b28b33c6e}{logData}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *filename,\ \textcolor{keyword}{const}\ String\ \&data,\textcolor{keywordtype}{bool}\ serialout);}
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_a9f9d0ca80f41782edf366170577a124e}{handleDataLogging}}();}
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_ae2da94e03570cd696d5e1ef31169b6f3}{goToSleep}}();}
+\DoxyCodeLine{00022\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_abe87ef16aaf84b82d35566c519f789ef}{bucket\_tips}}();}
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{void}\ IRAM\_ATTR\ \mbox{\hyperlink{main_8h_addd4b4572dcd9663471534593634caac}{ISR}}();}
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{main_8h_afa49d929ad679cfb2cd516727c5225ef}{check\_reset\_timer}}();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{extern}\ SPIClass\ \mbox{\hyperlink{main_8h_a7cc21093d79b7c973e66b1c451a3418c}{vspi}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{extern}\ Preferences\ \mbox{\hyperlink{main_8h_a6ea06cf7b8092a0adaf07614d7ece59d}{preferences}};}
+\DoxyCodeLine{00028\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{int}\ RTC\_DATA\_ATTR\ \mbox{\hyperlink{main_8h_a3eeb80a02a2c4e1b5c56f3ab29822ba1}{num\_id}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{int}\ RTC\_DATA\_ATTR\ \mbox{\hyperlink{main_8h_a447f9d5cca0f85dddba722a8efcd33bd}{sleep\_interval}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*MAIN\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

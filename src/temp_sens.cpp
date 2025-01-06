@@ -79,7 +79,7 @@ void temp_BME280_init(){
  *
  * @return The temperature measured by the BME280 sensor.
  */
-float temp_BME280_read_temp(){
+float BME280_read_temp(){
     float temp;
     while (sensor_bme208.isMeasuring()){
     }   
@@ -95,7 +95,7 @@ float temp_BME280_read_temp(){
  *
  * @return The pressure value read from the BME280 sensor.
  */
-float temp_BME280_read_pressure(){
+float BME280_read_pressure(){
     float pressure;
     while (sensor_bme208.isMeasuring()){
     } 
@@ -111,7 +111,7 @@ float temp_BME280_read_pressure(){
  *
  * @return The humidity value read from the BME280 sensor.
  */
-float temp_BME280_read_humidity(){
+float BME280_read_humidity(){
     float humidity;
     while (sensor_bme208.isMeasuring()){
     } 

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['handledatalogging_0',['handleDataLogging',['../main_8cpp.html#a9f9d0ca80f41782edf366170577a124e',1,'main.cpp']]],
-  ['handlewifiserver_1',['handleWiFiServer',['../main_8cpp.html#a9d7eff099181f8ab48d175d12e3171c4',1,'main.cpp']]]
+  ['data_5fprocessing_0',['data_processing',['../lora_8cpp.html#aa77586c54009a37ee5ea1b088db21fe1',1,'data_processing(const char *filename, uint8_t *data):&#160;lora.cpp'],['../lora_8h.html#aa77586c54009a37ee5ea1b088db21fe1',1,'data_processing(const char *filename, uint8_t *data):&#160;lora.cpp']]],
+  ['do_5fsend_1',['do_send',['../lora_8cpp.html#ab42efec0e8860ab768280a3d778b4c0e',1,'do_send(osjob_t *j):&#160;lora.cpp'],['../lora_8h.html#ab42efec0e8860ab768280a3d778b4c0e',1,'do_send(osjob_t *j):&#160;lora.cpp']]]
 ];

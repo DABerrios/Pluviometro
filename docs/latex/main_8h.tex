@@ -1,0 +1,190 @@
+\doxysection{include/main.h File Reference}
+\hypertarget{main_8h}{}\label{main_8h}\index{include/main.h@{include/main.h}}
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$SPI.\+h$>$}\newline
+{\ttfamily \#include $<$Preferences.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8h_ac7b56a7e55221f8b95af7d07bd2185c7}{WAKEUP\+\_\+\+PIN}}~GPIO\+\_\+\+NUM\+\_\+34
+\item 
+\#define \mbox{\hyperlink{main_8h_a1533dfce7630ed4ffc372772e8e3899a}{WAKEUP\+\_\+\+PIN\+\_\+2\+\_\+wifi}}~GPIO\+\_\+\+NUM\+\_\+35
+\item 
+\#define \mbox{\hyperlink{main_8h_a7d4515322b1ae2d7fdf14b3ccd78a31b}{SD\+\_\+\+SCK}}~25
+\item 
+\#define \mbox{\hyperlink{main_8h_afb087f7305dc744753834627d3f495d7}{SD\+\_\+\+MISO}}~26
+\item 
+\#define \mbox{\hyperlink{main_8h_a48f4a08c693ab4e9bf6f412a1b385ea8}{SD\+\_\+\+MOSI}}~27
+\item 
+\#define \mbox{\hyperlink{main_8h_a7e2d8ef8f0724f23ce84b1e7d0c171d9}{SD\+\_\+\+CS}}~14
+\item 
+\#define \mbox{\hyperlink{main_8h_a4c3a63d41818b1c52526d478881f1403}{CCS811\+\_\+\+ADDR}}~0x5B
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8h_abef06e3b619f047a7b59887b28b33c6e}{log\+Data}} (const char \texorpdfstring{$\ast$}{*}filename, const String \&data, bool serialout)
+\begin{DoxyCompactList}\small\item\em Logs data to an SD card file and optionally outputs to the serial monitor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_a9f9d0ca80f41782edf366170577a124e}{handle\+Data\+Logging}} ()
+\begin{DoxyCompactList}\small\item\em Handles the data logging process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_ae2da94e03570cd696d5e1ef31169b6f3}{go\+To\+Sleep}} ()
+\begin{DoxyCompactList}\small\item\em Puts the device into deep sleep mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_abe87ef16aaf84b82d35566c519f789ef}{bucket\+\_\+tips}} ()
+\begin{DoxyCompactList}\small\item\em counts the number of bucket tips of the rain gauge. \end{DoxyCompactList}\item 
+void IRAM\+\_\+\+ATTR \mbox{\hyperlink{main_8h_addd4b4572dcd9663471534593634caac}{ISR}} ()
+\begin{DoxyCompactList}\small\item\em Interrupt Service Routine (ISR) for handling bucket tips. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8h_afa49d929ad679cfb2cd516727c5225ef}{check\+\_\+reset\+\_\+timer}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+SPIClass \mbox{\hyperlink{main_8h_a7cc21093d79b7c973e66b1c451a3418c}{vspi}}
+\item 
+Preferences \mbox{\hyperlink{main_8h_a6ea06cf7b8092a0adaf07614d7ece59d}{preferences}}
+\item 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR \mbox{\hyperlink{main_8h_a3eeb80a02a2c4e1b5c56f3ab29822ba1}{num\+\_\+id}}
+\item 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR \mbox{\hyperlink{main_8h_a447f9d5cca0f85dddba722a8efcd33bd}{sleep\+\_\+interval}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{main_8h_a4c3a63d41818b1c52526d478881f1403}\index{main.h@{main.h}!CCS811\_ADDR@{CCS811\_ADDR}}
+\index{CCS811\_ADDR@{CCS811\_ADDR}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{CCS811\_ADDR}{CCS811\_ADDR}}
+{\footnotesize\ttfamily \label{main_8h_a4c3a63d41818b1c52526d478881f1403} 
+\#define CCS811\+\_\+\+ADDR~0x5B}
+
+\Hypertarget{main_8h_a7e2d8ef8f0724f23ce84b1e7d0c171d9}\index{main.h@{main.h}!SD\_CS@{SD\_CS}}
+\index{SD\_CS@{SD\_CS}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{SD\_CS}{SD\_CS}}
+{\footnotesize\ttfamily \label{main_8h_a7e2d8ef8f0724f23ce84b1e7d0c171d9} 
+\#define SD\+\_\+\+CS~14}
+
+\Hypertarget{main_8h_afb087f7305dc744753834627d3f495d7}\index{main.h@{main.h}!SD\_MISO@{SD\_MISO}}
+\index{SD\_MISO@{SD\_MISO}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{SD\_MISO}{SD\_MISO}}
+{\footnotesize\ttfamily \label{main_8h_afb087f7305dc744753834627d3f495d7} 
+\#define SD\+\_\+\+MISO~26}
+
+\Hypertarget{main_8h_a48f4a08c693ab4e9bf6f412a1b385ea8}\index{main.h@{main.h}!SD\_MOSI@{SD\_MOSI}}
+\index{SD\_MOSI@{SD\_MOSI}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{SD\_MOSI}{SD\_MOSI}}
+{\footnotesize\ttfamily \label{main_8h_a48f4a08c693ab4e9bf6f412a1b385ea8} 
+\#define SD\+\_\+\+MOSI~27}
+
+\Hypertarget{main_8h_a7d4515322b1ae2d7fdf14b3ccd78a31b}\index{main.h@{main.h}!SD\_SCK@{SD\_SCK}}
+\index{SD\_SCK@{SD\_SCK}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{SD\_SCK}{SD\_SCK}}
+{\footnotesize\ttfamily \label{main_8h_a7d4515322b1ae2d7fdf14b3ccd78a31b} 
+\#define SD\+\_\+\+SCK~25}
+
+\Hypertarget{main_8h_ac7b56a7e55221f8b95af7d07bd2185c7}\index{main.h@{main.h}!WAKEUP\_PIN@{WAKEUP\_PIN}}
+\index{WAKEUP\_PIN@{WAKEUP\_PIN}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{WAKEUP\_PIN}{WAKEUP\_PIN}}
+{\footnotesize\ttfamily \label{main_8h_ac7b56a7e55221f8b95af7d07bd2185c7} 
+\#define WAKEUP\+\_\+\+PIN~GPIO\+\_\+\+NUM\+\_\+34}
+
+\Hypertarget{main_8h_a1533dfce7630ed4ffc372772e8e3899a}\index{main.h@{main.h}!WAKEUP\_PIN\_2\_wifi@{WAKEUP\_PIN\_2\_wifi}}
+\index{WAKEUP\_PIN\_2\_wifi@{WAKEUP\_PIN\_2\_wifi}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{WAKEUP\_PIN\_2\_wifi}{WAKEUP\_PIN\_2\_wifi}}
+{\footnotesize\ttfamily \label{main_8h_a1533dfce7630ed4ffc372772e8e3899a} 
+\#define WAKEUP\+\_\+\+PIN\+\_\+2\+\_\+wifi~GPIO\+\_\+\+NUM\+\_\+35}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8h_abe87ef16aaf84b82d35566c519f789ef}\index{main.h@{main.h}!bucket\_tips@{bucket\_tips}}
+\index{bucket\_tips@{bucket\_tips}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{bucket\_tips()}{bucket\_tips()}}
+{\footnotesize\ttfamily \label{main_8h_abe87ef16aaf84b82d35566c519f789ef} 
+void bucket\+\_\+tips (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+counts the number of bucket tips of the rain gauge. 
+
+this function increments the bucket\+\_\+tips\+\_\+counter variable by 1. \Hypertarget{main_8h_afa49d929ad679cfb2cd516727c5225ef}\index{main.h@{main.h}!check\_reset\_timer@{check\_reset\_timer}}
+\index{check\_reset\_timer@{check\_reset\_timer}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{check\_reset\_timer()}{check\_reset\_timer()}}
+{\footnotesize\ttfamily \label{main_8h_afa49d929ad679cfb2cd516727c5225ef} 
+void check\+\_\+reset\+\_\+timer (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8h_ae2da94e03570cd696d5e1ef31169b6f3}\index{main.h@{main.h}!goToSleep@{goToSleep}}
+\index{goToSleep@{goToSleep}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{goToSleep()}{goToSleep()}}
+{\footnotesize\ttfamily \label{main_8h_ae2da94e03570cd696d5e1ef31169b6f3} 
+void go\+To\+Sleep (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Puts the device into deep sleep mode. 
+
+This function performs the necessary steps to put the device into deep sleep mode. It turns off the Wi-\/\+Fi to save power, stops the Wi-\/\+Fi driver, and starts the deep sleep mode. \Hypertarget{main_8h_a9f9d0ca80f41782edf366170577a124e}\index{main.h@{main.h}!handleDataLogging@{handleDataLogging}}
+\index{handleDataLogging@{handleDataLogging}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{handleDataLogging()}{handleDataLogging()}}
+{\footnotesize\ttfamily \label{main_8h_a9f9d0ca80f41782edf366170577a124e} 
+void handle\+Data\+Logging (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Handles the data logging process. 
+
+This function is responsible for logging data when the system wakes up. Retrieves the current date and time from the RTC, formats the date and time, and logs the datam to a specified file.
+
+The logged data includes thetemperatur,the amount of rain, the current date, time, and a numerical identifier. \Hypertarget{main_8h_addd4b4572dcd9663471534593634caac}\index{main.h@{main.h}!ISR@{ISR}}
+\index{ISR@{ISR}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{ISR()}{ISR()}}
+{\footnotesize\ttfamily \label{main_8h_addd4b4572dcd9663471534593634caac} 
+void IRAM\+\_\+\+ATTR ISR (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Interrupt Service Routine (ISR) for handling bucket tips. 
+
+This function is marked with IRAM\+\_\+\+ATTR to ensure it is placed in the IRAM (Instruction RAM) for faster execution. It is triggered by an interrupt and calls the \doxylink{main_8cpp_a416b4746bdf23249a26b1d9149208f85}{bucket\+\_\+tips\+\_\+log()} function to log the bucket tips. \Hypertarget{main_8h_abef06e3b619f047a7b59887b28b33c6e}\index{main.h@{main.h}!logData@{logData}}
+\index{logData@{logData}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{logData()}{logData()}}
+{\footnotesize\ttfamily \label{main_8h_abef06e3b619f047a7b59887b28b33c6e} 
+void log\+Data (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{, }\item[{const String \&}]{data}{, }\item[{bool}]{serialout}{}\end{DoxyParamCaption})}
+
+
+
+Logs data to an SD card file and optionally outputs to the serial monitor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file to write to on the SD card. \\
+\hline
+{\em data} & The data to be written to the file. \\
+\hline
+{\em serialout} & If true, outputs status messages to the serial monitor. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8h_a3eeb80a02a2c4e1b5c56f3ab29822ba1}\index{main.h@{main.h}!num\_id@{num\_id}}
+\index{num\_id@{num\_id}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{num\_id}{num\_id}}
+{\footnotesize\ttfamily \label{main_8h_a3eeb80a02a2c4e1b5c56f3ab29822ba1} 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR num\+\_\+id\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{main_8h_a6ea06cf7b8092a0adaf07614d7ece59d}\index{main.h@{main.h}!preferences@{preferences}}
+\index{preferences@{preferences}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{preferences}{preferences}}
+{\footnotesize\ttfamily \label{main_8h_a6ea06cf7b8092a0adaf07614d7ece59d} 
+Preferences preferences\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{main_8h_a447f9d5cca0f85dddba722a8efcd33bd}\index{main.h@{main.h}!sleep\_interval@{sleep\_interval}}
+\index{sleep\_interval@{sleep\_interval}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{sleep\_interval}{sleep\_interval}}
+{\footnotesize\ttfamily \label{main_8h_a447f9d5cca0f85dddba722a8efcd33bd} 
+int RTC\+\_\+\+DATA\+\_\+\+ATTR sleep\+\_\+interval\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{main_8h_a7cc21093d79b7c973e66b1c451a3418c}\index{main.h@{main.h}!vspi@{vspi}}
+\index{vspi@{vspi}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{vspi}{vspi}}
+{\footnotesize\ttfamily \label{main_8h_a7cc21093d79b7c973e66b1c451a3418c} 
+SPIClass vspi\hspace{0.3cm}{\ttfamily [extern]}}
+

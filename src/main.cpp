@@ -1,5 +1,10 @@
 #include <Arduino.h>
 
+/** 
+ * @file main.cpp
+ * @brief Main file for the Pluviometro project.
+ */
+
 /* Include libraries*/
 #include <SPI.h>
 #include <Wire.h>
@@ -10,12 +15,9 @@
 #include <WiFi.h>
 #include <FS.h>
 #include <SD.h>
-#include <esp_wifi.h>
-#include <SparkFunBME280.h>
 #include <preferences.h>
-#include <SparkFunCCS811.h>
 //#include <DallasTemperature.h>
-#include <SparkFunTMP102.h>
+
 //#include <OneWire.h>
 
 
@@ -30,18 +32,18 @@
 
 
 // Create a SPI object
-
-SPIClass vspi(VSPI);
-
+SPIClass SPI2(HSPI);
 //OneWire oneWire(33);
 
-/*global variable*/
+/** 
+ * @brief Global variables
+ */
 int RTC_DATA_ATTR num_id = 0;
 int RTC_DATA_ATTR bucket_tips_counter = 0;
 int bucket_tips_counter_log=0;
 int RTC_DATA_ATTR sec_to_micro = 1000000;
 int RTC_DATA_ATTR sleep_interval = 60 ;;
-uint32_t RTC_DATA_ATTR rain_reset_timer = 0;
+uint32_t RTC_DATA_ATTR rtimer = 0;
 int RTC_DATA_ATTR sleep_counter = 0;
 int RTC_DATA_ATTR sleep_counter_limit = 10;
 
@@ -76,6 +78,8 @@ void setup() {
     btStop();
     esp_wifi_stop();
 
+    
+
     /*initialize serial for debugging*/// to be removed for final version
     Serial.begin(115200);
     delay(1000);  // Give time for Serial monitor to connect
@@ -84,9 +88,11 @@ void setup() {
     setCpuFrequencyMhz(80);
     
     /*Spi config*/
-    vspi.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
-    pinMode(SD_CS, OUTPUT);
-    digitalWrite(SD_CS, HIGH);
+    
+    SPI2.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
+    Serial.println("sd");
+    SD_init();
+    Serial.println("sd_in");
     /*wakeup sources*/ 
     esp_sleep_enable_ext1_wakeup((1ULL<<WAKEUP_PIN)|(1ULL<<WAKEUP_PIN_2_wifi), ESP_EXT1_WAKEUP_ANY_HIGH);
     esp_sleep_enable_timer_wakeup(sleep_interval * sec_to_micro);
@@ -100,7 +106,7 @@ void setup() {
     /*initialize the preferences objects*/
     preferences.begin("serial_num", false);
     preferences.begin("sleep_interval", false); 
-    preferences.begin("rain_reset_timer", false);
+    preferences.begin("rtimer", false);
 
     /*get data from the preferences objects*/
     num_id = preferences.getInt("num_id", 0);
@@ -158,15 +164,13 @@ void setup() {
         // check if the RTC lost power and if so, set the time
         RTC_power_loss();
         // Initialize rain reset timer
-        rain_reset_timer = preferences.getUInt("rain_reset_timer", 0);
+        rtimer = preferences.getUInt("rtimer", 0);
         DateTime now = rtc.now();
-        rain_reset_timer = now.unixtime();
-        preferences.putInt("rain_reset_timer", rain_reset_timer);
+        rtimer = now.unixtime();
+        preferences.putInt("rtimer", rtimer);
 
         ccs811_stop();
         
-        pinMode(SX1276_NSS, OUTPUT);
-        digitalWrite(SX1276_NSS, HIGH);
         //sendDataFromFile("/rain_data.txt");
         temp_102_init();
         Serial.println("Initialization complete!");// to be removed for final version
@@ -175,8 +179,10 @@ void setup() {
         Serial.println(temp102);
         temp_BME280_init();
         Serial.print("Temperature: ");
-        Serial.println(temp_BME280_read_temp());
-           
+        Serial.println(BME280_read_temp());
+        SD_init();
+        loraWAN_config_and_transmition();
+         
     }
 
 
@@ -212,7 +218,7 @@ void loop() {
   }
   else if(loraWANActive){
     os_runloop_once();
-    //loraWANActive = false;
+    loraWANActive = false;
   }
   else{
     // If the server is not active, go to sleep
@@ -266,7 +272,8 @@ void handleDataLogging() {
     char result1[50];
     snprintf(result1, sizeof(result1), "%.4f,%s,%s,%d", rain, date, time, num_id);
     char result2[100];
-    float temp= temp_BME280_read_temp();
+    temp_102_init();
+    float temp= temp_102_read();
     snprintf(result2, sizeof(result2), "%.2f,%s", temp, result1);
 
     //ds18b20.begin();
@@ -324,9 +331,9 @@ void IRAM_ATTR ISR() {
 void check_reset_timer(){
   DateTime now = rtc.now();
   uint32_t current_time = now.unixtime();
-  if (current_time - rain_reset_timer >= 86400){
-    rain_reset_timer = current_time;
-    preferences.putUInt("rain_reset_timer", rain_reset_timer);
+  if (current_time - rtimer >= 86400){
+    rtimer = current_time;
+    preferences.putUInt("rtimer", rtimer);
     bucket_tips_counter = 0;
 
   }

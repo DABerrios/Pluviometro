@@ -1,0 +1,287 @@
+\doxysection{include/lora.h File Reference}
+\hypertarget{lora_8h}{}\label{lora_8h}\index{include/lora.h@{include/lora.h}}
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$lmic.\+h$>$}\newline
+{\ttfamily \#include $<$hal/hal.\+h$>$}\newline
+{\ttfamily \#include $<$SPI.\+h$>$}\newline
+{\ttfamily \#include $<$SD.\+h$>$}\newline
+{\ttfamily \#include $<$preferences.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{lora_8h_a1725019f88d51fe88d3708c63927939e}{SX1276\+\_\+\+SCK}}~18
+\item 
+\#define \mbox{\hyperlink{lora_8h_a6269695994a5fab5a4d1690236bd39fb}{SX1276\+\_\+\+MISO}}~19
+\item 
+\#define \mbox{\hyperlink{lora_8h_a6bc86392a25db464812400b2cda0bc63}{SX1276\+\_\+\+MOSI}}~23
+\item 
+\#define \mbox{\hyperlink{lora_8h_a90e2250233b92babc91add8daf5e27b2}{SX1276\+\_\+\+NSS}}~5
+\item 
+\#define \mbox{\hyperlink{lora_8h_ae3fdfec46955b03f05c8d7715dc41d79}{SX1276\+\_\+\+RST}}~12
+\item 
+\#define \mbox{\hyperlink{lora_8h_a839015d97f9441df848f67d41570cf90}{SX1276\+\_\+\+DIO0}}~32
+\item 
+\#define \mbox{\hyperlink{lora_8h_a1787bdfd224acaec2e10ddaf2b153b7a}{SX1276\+\_\+\+DIO1}}~13
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{lora_8h_a5a2a6547b00c3425dd0d71bfa2800886}{lora\+WAN\+\_\+test}} ()
+\item 
+void \mbox{\hyperlink{lora_8h_ab42efec0e8860ab768280a3d778b4c0e}{do\+\_\+send}} (osjob\+\_\+t \texorpdfstring{$\ast$}{*}j)
+\begin{DoxyCompactList}\small\item\em Sends data using the Lo\+Ra\+WAN protocol. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{lora_8h_aaead836f5e0f65f5906b7ce269e92436}{on\+Event}} (ev\+\_\+t ev)
+\begin{DoxyCompactList}\small\item\em Event handler for Lo\+Ra events. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{lora_8h_aecd1cc93051898c3777cb135c6f7baeb}{Lineprocessing}} (const String \&line, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data)
+\item 
+void \mbox{\hyperlink{lora_8h_a518c053fc83e3afad95a7eb888108e66}{send\+Data\+From\+File}} (const char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Sends data from a specified file over Lo\+Ra. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{lora_8h_a8b87e6c24b58790f84babe4f50e2cf48}{save\+Last\+Position}} (unsigned long position)
+\begin{DoxyCompactList}\small\item\em Saves the last position to persistent storage. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{lora_8h_ad7595540527b820ae0c64023481d60c8}{read\+Last\+Position}} ()
+\begin{DoxyCompactList}\small\item\em Reads the last saved position from preferences. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{lora_8h_a70f58dcb5b0adb04adcb7cb1115d4f99}{lora\+WAN\+\_\+config\+\_\+and\+\_\+transmition}} ()
+\begin{DoxyCompactList}\small\item\em Configures and initiates the Lo\+Ra\+WAN transmission. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{lora_8h_aa77586c54009a37ee5ea1b088db21fe1}{data\+\_\+processing}} (const char \texorpdfstring{$\ast$}{*}filename, uint8\+\_\+t \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Processes data from a file and calculates the average temperature. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{lora_8h_ae896ade8de020eddf38adba829f22445}{lora\+WANActive}}
+\item 
+Preferences \mbox{\hyperlink{lora_8h_a6ea06cf7b8092a0adaf07614d7ece59d}{preferences}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{lora_8h_a839015d97f9441df848f67d41570cf90}\index{lora.h@{lora.h}!SX1276\_DIO0@{SX1276\_DIO0}}
+\index{SX1276\_DIO0@{SX1276\_DIO0}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_DIO0}{SX1276\_DIO0}}
+{\footnotesize\ttfamily \label{lora_8h_a839015d97f9441df848f67d41570cf90} 
+\#define SX1276\+\_\+\+DIO0~32}
+
+\Hypertarget{lora_8h_a1787bdfd224acaec2e10ddaf2b153b7a}\index{lora.h@{lora.h}!SX1276\_DIO1@{SX1276\_DIO1}}
+\index{SX1276\_DIO1@{SX1276\_DIO1}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_DIO1}{SX1276\_DIO1}}
+{\footnotesize\ttfamily \label{lora_8h_a1787bdfd224acaec2e10ddaf2b153b7a} 
+\#define SX1276\+\_\+\+DIO1~13}
+
+\Hypertarget{lora_8h_a6269695994a5fab5a4d1690236bd39fb}\index{lora.h@{lora.h}!SX1276\_MISO@{SX1276\_MISO}}
+\index{SX1276\_MISO@{SX1276\_MISO}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_MISO}{SX1276\_MISO}}
+{\footnotesize\ttfamily \label{lora_8h_a6269695994a5fab5a4d1690236bd39fb} 
+\#define SX1276\+\_\+\+MISO~19}
+
+\Hypertarget{lora_8h_a6bc86392a25db464812400b2cda0bc63}\index{lora.h@{lora.h}!SX1276\_MOSI@{SX1276\_MOSI}}
+\index{SX1276\_MOSI@{SX1276\_MOSI}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_MOSI}{SX1276\_MOSI}}
+{\footnotesize\ttfamily \label{lora_8h_a6bc86392a25db464812400b2cda0bc63} 
+\#define SX1276\+\_\+\+MOSI~23}
+
+\Hypertarget{lora_8h_a90e2250233b92babc91add8daf5e27b2}\index{lora.h@{lora.h}!SX1276\_NSS@{SX1276\_NSS}}
+\index{SX1276\_NSS@{SX1276\_NSS}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_NSS}{SX1276\_NSS}}
+{\footnotesize\ttfamily \label{lora_8h_a90e2250233b92babc91add8daf5e27b2} 
+\#define SX1276\+\_\+\+NSS~5}
+
+\Hypertarget{lora_8h_ae3fdfec46955b03f05c8d7715dc41d79}\index{lora.h@{lora.h}!SX1276\_RST@{SX1276\_RST}}
+\index{SX1276\_RST@{SX1276\_RST}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_RST}{SX1276\_RST}}
+{\footnotesize\ttfamily \label{lora_8h_ae3fdfec46955b03f05c8d7715dc41d79} 
+\#define SX1276\+\_\+\+RST~12}
+
+\Hypertarget{lora_8h_a1725019f88d51fe88d3708c63927939e}\index{lora.h@{lora.h}!SX1276\_SCK@{SX1276\_SCK}}
+\index{SX1276\_SCK@{SX1276\_SCK}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{SX1276\_SCK}{SX1276\_SCK}}
+{\footnotesize\ttfamily \label{lora_8h_a1725019f88d51fe88d3708c63927939e} 
+\#define SX1276\+\_\+\+SCK~18}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{lora_8h_aa77586c54009a37ee5ea1b088db21fe1}\index{lora.h@{lora.h}!data\_processing@{data\_processing}}
+\index{data\_processing@{data\_processing}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{data\_processing()}{data\_processing()}}
+{\footnotesize\ttfamily \label{lora_8h_aa77586c54009a37ee5ea1b088db21fe1} 
+size\+\_\+t data\+\_\+processing (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})}
+
+
+
+Processes data from a file and calculates the average temperature. 
+
+This function reads data from the specified file starting from the last read position, calculates the average temperature from the data, and processes the last line of data.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file to read data from. \\
+\hline
+{\em data} & A pointer to a buffer where processed data will be stored. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the processed data. 
+\end{DoxyReturn}
+\Hypertarget{lora_8h_ab42efec0e8860ab768280a3d778b4c0e}\index{lora.h@{lora.h}!do\_send@{do\_send}}
+\index{do\_send@{do\_send}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{do\_send()}{do\_send()}}
+{\footnotesize\ttfamily \label{lora_8h_ab42efec0e8860ab768280a3d778b4c0e} 
+void do\+\_\+send (\begin{DoxyParamCaption}\item[{osjob\+\_\+t \texorpdfstring{$\ast$}{*}}]{j}{}\end{DoxyParamCaption})}
+
+
+
+Sends data using the Lo\+Ra\+WAN protocol. 
+
+This function checks if there is a current TX/\+RX job running. If there is no ongoing transmission or reception, it prepares an upstream data transmission at the next possible time.
+
+
+\begin{DoxyParams}{Parameters}
+{\em j} & Pointer to the osjob\+\_\+t structure representing the job to be executed.\\
+\hline
+\end{DoxyParams}
+The function performs the following actions\+:
+\begin{DoxyItemize}
+\item If a TX/\+RX job is currently running, it logs a message indicating that the transmission is pending and does not send data.
+\item If no TX/\+RX job is running, it queues a packet for transmission and logs a message indicating that the packet has been queued.
+\end{DoxyItemize}
+
+The next transmission is scheduled after the TX\+\_\+\+COMPLETE event. \Hypertarget{lora_8h_aecd1cc93051898c3777cb135c6f7baeb}\index{lora.h@{lora.h}!Lineprocessing@{Lineprocessing}}
+\index{Lineprocessing@{Lineprocessing}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{Lineprocessing()}{Lineprocessing()}}
+{\footnotesize\ttfamily \label{lora_8h_aecd1cc93051898c3777cb135c6f7baeb} 
+size\+\_\+t Lineprocessing (\begin{DoxyParamCaption}\item[{const String \&}]{line}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{data}{}\end{DoxyParamCaption})}
+
+\Hypertarget{lora_8h_a70f58dcb5b0adb04adcb7cb1115d4f99}\index{lora.h@{lora.h}!loraWAN\_config\_and\_transmition@{loraWAN\_config\_and\_transmition}}
+\index{loraWAN\_config\_and\_transmition@{loraWAN\_config\_and\_transmition}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{loraWAN\_config\_and\_transmition()}{loraWAN\_config\_and\_transmition()}}
+{\footnotesize\ttfamily \label{lora_8h_a70f58dcb5b0adb04adcb7cb1115d4f99} 
+void lora\+WAN\+\_\+config\+\_\+and\+\_\+transmition (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Configures and initiates the Lo\+Ra\+WAN transmission. 
+
+This function initializes the Lo\+Ra\+WAN stack, sets up the session keys, configures the channels, and sends data from a specified file.
+
+\begin{DoxyNote}{Note}
+The debug print statements are included for development purposes and should be removed in the final version.
+\end{DoxyNote}
+The function performs the following steps\+:
+\begin{DoxyItemize}
+\item Initializes the Lo\+Ra\+WAN stack.
+\item Resets the LMIC (Lo\+Ra\+MAC-\/in-\/C) library.
+\item Sets up the session keys for communication.
+\item Configures the channels based on the region (e.\+g., CFG\+\_\+au915).
+\item Disables link check mode.
+\item Sets the data rate and transmission power.
+\item Sends data from the specified file.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em None} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\Hypertarget{lora_8h_a5a2a6547b00c3425dd0d71bfa2800886}\index{lora.h@{lora.h}!loraWAN\_test@{loraWAN\_test}}
+\index{loraWAN\_test@{loraWAN\_test}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{loraWAN\_test()}{loraWAN\_test()}}
+{\footnotesize\ttfamily \label{lora_8h_a5a2a6547b00c3425dd0d71bfa2800886} 
+void lora\+WAN\+\_\+test (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{lora_8h_aaead836f5e0f65f5906b7ce269e92436}\index{lora.h@{lora.h}!onEvent@{onEvent}}
+\index{onEvent@{onEvent}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{onEvent()}{onEvent()}}
+{\footnotesize\ttfamily \label{lora_8h_aaead836f5e0f65f5906b7ce269e92436} 
+void on\+Event (\begin{DoxyParamCaption}\item[{ev\+\_\+t}]{ev}{}\end{DoxyParamCaption})}
+
+
+
+Event handler for Lo\+Ra events. 
+
+This function is called whenever a Lo\+Ra event occurs. It prints the event time and type to the serial monitor and handles specific events accordingly.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ev} & The event type (ev\+\_\+t) that occurred.\\
+\hline
+\end{DoxyParams}
+Event types handled\+:
+\begin{DoxyItemize}
+\item EV\+\_\+\+TXSTART\+: Transmission started.
+\item EV\+\_\+\+SCAN\+\_\+\+TIMEOUT\+: Scan timed out.
+\item EV\+\_\+\+BEACON\+\_\+\+FOUND\+: Beacon found.
+\item EV\+\_\+\+BEACON\+\_\+\+MISSED\+: Beacon missed.
+\item EV\+\_\+\+BEACON\+\_\+\+TRACKED\+: Beacon tracked.
+\item EV\+\_\+\+JOINING\+: Joining network.
+\item EV\+\_\+\+JOINED\+: Joined network.
+\item EV\+\_\+\+RFU1\+: Reserved for future use.
+\item EV\+\_\+\+JOIN\+\_\+\+FAILED\+: Joining network failed.
+\item EV\+\_\+\+REJOIN\+\_\+\+FAILED\+: Rejoining network failed.
+\item EV\+\_\+\+TXCOMPLETE\+: Transmission complete (includes waiting for RX windows).
+\item EV\+\_\+\+LOST\+\_\+\+TSYNC\+: Lost time synchronization.
+\item EV\+\_\+\+RESET\+: Reset event.
+\item EV\+\_\+\+RXCOMPLETE\+: Data received in ping slot.
+\item EV\+\_\+\+LINK\+\_\+\+DEAD\+: Link dead.
+\item EV\+\_\+\+LINK\+\_\+\+ALIVE\+: Link alive.
+\item Default\+: Unknown event. 
+\end{DoxyItemize}\Hypertarget{lora_8h_ad7595540527b820ae0c64023481d60c8}\index{lora.h@{lora.h}!readLastPosition@{readLastPosition}}
+\index{readLastPosition@{readLastPosition}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{readLastPosition()}{readLastPosition()}}
+{\footnotesize\ttfamily \label{lora_8h_ad7595540527b820ae0c64023481d60c8} 
+void read\+Last\+Position (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Reads the last saved position from preferences. 
+
+This function initializes the preferences with the namespace "{}last\+\_\+line"{} and retrieves the integer value associated with the key "{}last\+\_\+line"{}. If the key does not exist, it defaults to 0. \Hypertarget{lora_8h_a8b87e6c24b58790f84babe4f50e2cf48}\index{lora.h@{lora.h}!saveLastPosition@{saveLastPosition}}
+\index{saveLastPosition@{saveLastPosition}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{saveLastPosition()}{saveLastPosition()}}
+{\footnotesize\ttfamily \label{lora_8h_a8b87e6c24b58790f84babe4f50e2cf48} 
+void save\+Last\+Position (\begin{DoxyParamCaption}\item[{unsigned long}]{position}{}\end{DoxyParamCaption})}
+
+
+
+Saves the last position to persistent storage. 
+
+This function stores the given position value in a persistent storage using the preferences API. The position is saved under the key "{}last\+\_\+line"{}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & The position value to be saved. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{lora_8h_a518c053fc83e3afad95a7eb888108e66}\index{lora.h@{lora.h}!sendDataFromFile@{sendDataFromFile}}
+\index{sendDataFromFile@{sendDataFromFile}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{sendDataFromFile()}{sendDataFromFile()}}
+{\footnotesize\ttfamily \label{lora_8h_a518c053fc83e3afad95a7eb888108e66} 
+void send\+Data\+From\+File (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{}\end{DoxyParamCaption})}
+
+
+
+Sends data from a specified file over Lo\+Ra. 
+
+This function initializes the SD card, opens the specified file, and reads data from it. If the file has been read before, it seeks to the last read position. If the next character in the file is a newline, the function puts the device to sleep. Otherwise, it processes the data and sends it using Lo\+Ra. The function waits until the transmission is complete before returning.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file to read data from. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{lora_8h_ae896ade8de020eddf38adba829f22445}\index{lora.h@{lora.h}!loraWANActive@{loraWANActive}}
+\index{loraWANActive@{loraWANActive}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{loraWANActive}{loraWANActive}}
+{\footnotesize\ttfamily \label{lora_8h_ae896ade8de020eddf38adba829f22445} 
+bool lora\+WANActive\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{lora_8h_a6ea06cf7b8092a0adaf07614d7ece59d}\index{lora.h@{lora.h}!preferences@{preferences}}
+\index{preferences@{preferences}!lora.h@{lora.h}}
+\doxysubsubsection{\texorpdfstring{preferences}{preferences}}
+{\footnotesize\ttfamily \label{lora_8h_a6ea06cf7b8092a0adaf07614d7ece59d} 
+Preferences preferences\hspace{0.3cm}{\ttfamily [extern]}}
+

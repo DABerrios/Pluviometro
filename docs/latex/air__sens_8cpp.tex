@@ -1,0 +1,48 @@
+\doxysection{src/air\+\_\+sens.cpp File Reference}
+\hypertarget{air__sens_8cpp}{}\label{air__sens_8cpp}\index{src/air\_sens.cpp@{src/air\_sens.cpp}}
+{\ttfamily \#include $<$air\+\_\+sens.\+h$>$}\newline
+{\ttfamily \#include $<$main.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+CCS811 \mbox{\hyperlink{air__sens_8cpp_a014936ebceddd1d71bcebda0d15b8075}{ccs811}} (\mbox{\hyperlink{main_8h_a4c3a63d41818b1c52526d478881f1403}{CCS811\+\_\+\+ADDR}})
+\item 
+void \mbox{\hyperlink{air__sens_8cpp_a478f22003ddd05de2f71651d5ab61334}{ccs811\+\_\+stop}} ()
+\begin{DoxyCompactList}\small\item\em Stops the CCS811 sensor by setting its drive mode to 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{air__sens_8cpp_a532a52a2278aa5301a83a10850a2ebf1}{ccs811\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the CCS811 sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{air__sens_8cpp_a014936ebceddd1d71bcebda0d15b8075}\index{air\_sens.cpp@{air\_sens.cpp}!ccs811@{ccs811}}
+\index{ccs811@{ccs811}!air\_sens.cpp@{air\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{ccs811()}{ccs811()}}
+{\footnotesize\ttfamily \label{air__sens_8cpp_a014936ebceddd1d71bcebda0d15b8075} 
+CCS811 ccs811 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{main_8h_a4c3a63d41818b1c52526d478881f1403}{CCS811\+\_\+\+ADDR}}}]{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{air__sens_8cpp_a532a52a2278aa5301a83a10850a2ebf1}\index{air\_sens.cpp@{air\_sens.cpp}!ccs811\_init@{ccs811\_init}}
+\index{ccs811\_init@{ccs811\_init}!air\_sens.cpp@{air\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{ccs811\_init()}{ccs811\_init()}}
+{\footnotesize\ttfamily \label{air__sens_8cpp_a532a52a2278aa5301a83a10850a2ebf1} 
+void ccs811\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the CCS811 sensor. 
+
+This function initializes the CCS811 sensor by checking if the sensor is connected and setting its drive mode. If the sensor is not found, the function will print an error message and enter an infinite loop.
+
+\begin{DoxyNote}{Note}
+The drive mode is set to mode 1. 
+\end{DoxyNote}
+\Hypertarget{air__sens_8cpp_a478f22003ddd05de2f71651d5ab61334}\index{air\_sens.cpp@{air\_sens.cpp}!ccs811\_stop@{ccs811\_stop}}
+\index{ccs811\_stop@{ccs811\_stop}!air\_sens.cpp@{air\_sens.cpp}}
+\doxysubsubsection{\texorpdfstring{ccs811\_stop()}{ccs811\_stop()}}
+{\footnotesize\ttfamily \label{air__sens_8cpp_a478f22003ddd05de2f71651d5ab61334} 
+void ccs811\+\_\+stop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stops the CCS811 sensor by setting its drive mode to 0. 
+
+This function first checks if the CCS811 sensor is properly initialized. If the sensor is not found, it prints an error message to the serial monitor and enters an infinite loop to halt further execution. If the sensor is found, it sets the drive mode of the CCS811 sensor to 0, effectively stopping it. 

@@ -1,0 +1,93 @@
+\doxysection{src/wifi\+\_\+ap\+\_\+serv.cpp File Reference}
+\hypertarget{wifi__ap__serv_8cpp}{}\label{wifi__ap__serv_8cpp}\index{src/wifi\_ap\_serv.cpp@{src/wifi\_ap\_serv.cpp}}
+{\ttfamily \#include $<$wifi\+\_\+ap\+\_\+serv.\+h$>$}\newline
+{\ttfamily \#include $<$main.\+h$>$}\newline
+{\ttfamily \#include $<$SD\+\_\+adp.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Async\+Web\+Server \mbox{\hyperlink{wifi__ap__serv_8cpp_a85f30d66aa1231313c8553fd485b22b1}{server}} (80)
+\item 
+void \mbox{\hyperlink{wifi__ap__serv_8cpp_a9d7eff099181f8ab48d175d12e3171c4}{handle\+Wi\+Fi\+Server}} ()
+\begin{DoxyCompactList}\small\item\em Initializes and handles the Wi-\/\+Fi server. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+String \mbox{\hyperlink{wifi__ap__serv_8cpp_a216440c31f6a2648df8cd21b5270bc3c}{received\+Data}} = "{}"{}
+\item 
+bool \mbox{\hyperlink{wifi__ap__serv_8cpp_a1c8389f6f5355f81caf8ec47cedb9dd9}{server\+Active}} = false
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{wifi__ap__serv_8cpp_a587ba0cb07f02913598610049a3bbb79}{ssid}} = "{}ESP32\+\_\+\+AP"{}
+\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{wifi__ap__serv_8cpp_aa4a2ebcb494493f648ae1e6975672575}{password}} = "{}12345678"{}
+\item 
+unsigned long \mbox{\hyperlink{wifi__ap__serv_8cpp_a94f69c5109e8c3076144a0ab061802fb}{last\+Activity\+Time}} = 0
+\item 
+const unsigned long \mbox{\hyperlink{wifi__ap__serv_8cpp_a879d8144bd009607e59d2d2773dd7328}{TIMEOUT\+\_\+\+PERIOD}} = 5 \texorpdfstring{$\ast$}{*} 60 \texorpdfstring{$\ast$}{*} 1000
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{wifi__ap__serv_8cpp_a9d7eff099181f8ab48d175d12e3171c4}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!handleWiFiServer@{handleWiFiServer}}
+\index{handleWiFiServer@{handleWiFiServer}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{handleWiFiServer()}{handleWiFiServer()}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a9d7eff099181f8ab48d175d12e3171c4} 
+void handle\+Wi\+Fi\+Server (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes and handles the Wi-\/\+Fi server. 
+
+This function sets up the Wi-\/\+Fi access point, configures the server routes, and handles incoming HTTP requests. It also enables Wi-\/\+Fi low-\/power mode and updates the last activity time.
+
+Routes\+:
+\begin{DoxyItemize}
+\item "{}/"{} (GET)\+: Displays the main configuration page with options to set the serial ID and sleep interval.
+\item "{}/submit"{} (GET)\+: Receives and processes the serial ID input from the user.
+\item "{}/set\+\_\+sleep\+\_\+interval"{} (GET)\+: Receives and sets the sleep interval input from the user.
+\item "{}/request\+\_\+file"{} (GET)\+: Reads and sends the content of the "{}rain\+\_\+data.\+txt"{} file from the SD card. 
+\end{DoxyItemize}\Hypertarget{wifi__ap__serv_8cpp_a85f30d66aa1231313c8553fd485b22b1}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!server@{server}}
+\index{server@{server}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{server()}{server()}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a85f30d66aa1231313c8553fd485b22b1} 
+Async\+Web\+Server server (\begin{DoxyParamCaption}\item[{80}]{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{wifi__ap__serv_8cpp_a94f69c5109e8c3076144a0ab061802fb}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!lastActivityTime@{lastActivityTime}}
+\index{lastActivityTime@{lastActivityTime}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{lastActivityTime}{lastActivityTime}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a94f69c5109e8c3076144a0ab061802fb} 
+unsigned long last\+Activity\+Time = 0}
+
+\Hypertarget{wifi__ap__serv_8cpp_aa4a2ebcb494493f648ae1e6975672575}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!password@{password}}
+\index{password@{password}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{password}{password}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_aa4a2ebcb494493f648ae1e6975672575} 
+const char\texorpdfstring{$\ast$}{*} password = "{}12345678"{}}
+
+\Hypertarget{wifi__ap__serv_8cpp_a216440c31f6a2648df8cd21b5270bc3c}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!receivedData@{receivedData}}
+\index{receivedData@{receivedData}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{receivedData}{receivedData}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a216440c31f6a2648df8cd21b5270bc3c} 
+String received\+Data = "{}"{}}
+
+\Hypertarget{wifi__ap__serv_8cpp_a1c8389f6f5355f81caf8ec47cedb9dd9}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!serverActive@{serverActive}}
+\index{serverActive@{serverActive}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{serverActive}{serverActive}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a1c8389f6f5355f81caf8ec47cedb9dd9} 
+bool server\+Active = false}
+
+\Hypertarget{wifi__ap__serv_8cpp_a587ba0cb07f02913598610049a3bbb79}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!ssid@{ssid}}
+\index{ssid@{ssid}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{ssid}{ssid}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a587ba0cb07f02913598610049a3bbb79} 
+const char\texorpdfstring{$\ast$}{*} ssid = "{}ESP32\+\_\+\+AP"{}}
+
+\Hypertarget{wifi__ap__serv_8cpp_a879d8144bd009607e59d2d2773dd7328}\index{wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}!TIMEOUT\_PERIOD@{TIMEOUT\_PERIOD}}
+\index{TIMEOUT\_PERIOD@{TIMEOUT\_PERIOD}!wifi\_ap\_serv.cpp@{wifi\_ap\_serv.cpp}}
+\doxysubsubsection{\texorpdfstring{TIMEOUT\_PERIOD}{TIMEOUT\_PERIOD}}
+{\footnotesize\ttfamily \label{wifi__ap__serv_8cpp_a879d8144bd009607e59d2d2773dd7328} 
+const unsigned long TIMEOUT\+\_\+\+PERIOD = 5 \texorpdfstring{$\ast$}{*} 60 \texorpdfstring{$\ast$}{*} 1000}
+

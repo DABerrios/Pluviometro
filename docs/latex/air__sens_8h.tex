@@ -1,0 +1,57 @@
+\doxysection{include/air\+\_\+sens.h File Reference}
+\hypertarget{air__sens_8h}{}\label{air__sens_8h}\index{include/air\_sens.h@{include/air\_sens.h}}
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include $<$Spark\+Fun\+CCS811.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{air__sens_8h_a478f22003ddd05de2f71651d5ab61334}{ccs811\+\_\+stop}} ()
+\begin{DoxyCompactList}\small\item\em Stops the CCS811 sensor by setting its drive mode to 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{air__sens_8h_a532a52a2278aa5301a83a10850a2ebf1}{ccs811\+\_\+init}} ()
+\begin{DoxyCompactList}\small\item\em Initializes the CCS811 sensor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+CCS811 \mbox{\hyperlink{air__sens_8h_aa7737aa64aaffc7f6e6428334795b0f5}{ccs811}}
+\begin{DoxyCompactList}\small\item\em CCS811 sensor object instantiated with the I2C address. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{air__sens_8h_a532a52a2278aa5301a83a10850a2ebf1}\index{air\_sens.h@{air\_sens.h}!ccs811\_init@{ccs811\_init}}
+\index{ccs811\_init@{ccs811\_init}!air\_sens.h@{air\_sens.h}}
+\doxysubsubsection{\texorpdfstring{ccs811\_init()}{ccs811\_init()}}
+{\footnotesize\ttfamily \label{air__sens_8h_a532a52a2278aa5301a83a10850a2ebf1} 
+void ccs811\+\_\+init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Initializes the CCS811 sensor. 
+
+This function initializes the CCS811 sensor by checking if the sensor is connected and setting its drive mode. If the sensor is not found, the function will print an error message and enter an infinite loop.
+
+\begin{DoxyNote}{Note}
+The drive mode is set to mode 1. 
+\end{DoxyNote}
+\Hypertarget{air__sens_8h_a478f22003ddd05de2f71651d5ab61334}\index{air\_sens.h@{air\_sens.h}!ccs811\_stop@{ccs811\_stop}}
+\index{ccs811\_stop@{ccs811\_stop}!air\_sens.h@{air\_sens.h}}
+\doxysubsubsection{\texorpdfstring{ccs811\_stop()}{ccs811\_stop()}}
+{\footnotesize\ttfamily \label{air__sens_8h_a478f22003ddd05de2f71651d5ab61334} 
+void ccs811\+\_\+stop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stops the CCS811 sensor by setting its drive mode to 0. 
+
+This function first checks if the CCS811 sensor is properly initialized. If the sensor is not found, it prints an error message to the serial monitor and enters an infinite loop to halt further execution. If the sensor is found, it sets the drive mode of the CCS811 sensor to 0, effectively stopping it. 
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{air__sens_8h_aa7737aa64aaffc7f6e6428334795b0f5}\index{air\_sens.h@{air\_sens.h}!ccs811@{ccs811}}
+\index{ccs811@{ccs811}!air\_sens.h@{air\_sens.h}}
+\doxysubsubsection{\texorpdfstring{ccs811}{ccs811}}
+{\footnotesize\ttfamily \label{air__sens_8h_aa7737aa64aaffc7f6e6428334795b0f5} 
+CCS811 ccs811\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+CCS811 sensor object instantiated with the I2C address. 
+

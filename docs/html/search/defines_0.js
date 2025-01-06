@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['ccs811_5faddr_0',['CCS811_ADDR',['../main_8cpp.html#a4c3a63d41818b1c52526d478881f1403',1,'main.cpp']]],
-  ['cs_1',['CS',['../main_8cpp.html#a3780e2fe762dc532df7d0f030b55caa0',1,'main.cpp']]]
+  ['ccs811_5faddr_0',['CCS811_ADDR',['../main_8h.html#a4c3a63d41818b1c52526d478881f1403',1,'main.h']]]
 ];

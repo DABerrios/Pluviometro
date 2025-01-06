@@ -28,7 +28,6 @@ void ccs811_stop(){
  * connected and setting its drive mode. If the sensor is not found, the 
  * function will print an error message and enter an infinite loop.
  * 
- * @note The drive mode is set to mode 1.
  */
 void ccs811_init(){
     if(!ccs811.begin()){

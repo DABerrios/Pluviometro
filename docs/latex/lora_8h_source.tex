@@ -1,0 +1,36 @@
+\doxysection{lora.\+h}
+\hypertarget{lora_8h_source}{}\label{lora_8h_source}\index{include/lora.h@{include/lora.h}}
+\mbox{\hyperlink{lora_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ LORA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ LORA\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <lmic.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <hal/hal.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <SPI.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <SD.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <preferences.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ SX1276\_SCK\ 18}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ SX1276\_MISO\ 19}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ SX1276\_MOSI\ 23}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ SX1276\_NSS\ 5}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ SX1276\_RST\ 12}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ SX1276\_DIO0\ 32}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ SX1276\_DIO1\ 13}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{lora_8h_ae896ade8de020eddf38adba829f22445}{loraWANActive}};}
+\DoxyCodeLine{00019\ \textcolor{keyword}{extern}\ Preferences\ \mbox{\hyperlink{lora_8h_a6ea06cf7b8092a0adaf07614d7ece59d}{preferences}};}
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_a5a2a6547b00c3425dd0d71bfa2800886}{loraWAN\_test}}();}
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_ab42efec0e8860ab768280a3d778b4c0e}{do\_send}}(osjob\_t*\ j);}
+\DoxyCodeLine{00022\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_aaead836f5e0f65f5906b7ce269e92436}{onEvent}}(ev\_t\ ev);}
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{lora_8h_aecd1cc93051898c3777cb135c6f7baeb}{Lineprocessing}}(\textcolor{keyword}{const}\ String\ \&line,uint8\_t*\ data);}
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_a518c053fc83e3afad95a7eb888108e66}{sendDataFromFile}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename);}
+\DoxyCodeLine{00025\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_a8b87e6c24b58790f84babe4f50e2cf48}{saveLastPosition}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ position);}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_ad7595540527b820ae0c64023481d60c8}{readLastPosition}}();}
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{lora_8h_a70f58dcb5b0adb04adcb7cb1115d4f99}{loraWAN\_config\_and\_transmition}}();}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{lora_8h_aa77586c54009a37ee5ea1b088db21fe1}{data\_processing}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ filename,\ uint8\_t*\ data);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*LORA\_H\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

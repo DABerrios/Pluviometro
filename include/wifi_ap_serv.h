@@ -5,6 +5,7 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <WiFi.h>
+#include <esp_wifi.h>
 
 /* Create an AsyncWebServer object on port 80*/
 /**

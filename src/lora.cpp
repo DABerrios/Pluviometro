@@ -4,15 +4,17 @@
 
 
 
-
 /*LoraWAN*/
 /*Dev address, NwkSKey, AppSKey*/
+static const PROGMEM u1_t NWKSKEY[16] = {0x73, 0x19, 0xD0, 0xCE, 0x95, 0xBD, 0x84, 0xA8, 0xCD, 0x17, 0xBB, 0xEA, 0x43, 0xA8, 0xD6, 0x9F};
+static const PROGMEM u1_t APPSKEY[16] = {0x9F, 0x4C, 0x2C, 0xAD, 0x66, 0x28, 0x44, 0xA6, 0x0A, 0x32, 0x96, 0x7A, 0xCA, 0x8A, 0xC2, 0x2C};
+static const u4_t DEVADDR = 0x260C0482;
 
-
+/*
 static const PROGMEM u1_t NWKSKEY[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const PROGMEM u1_t APPSKEY[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const u4_t DEVADDR = 0x00000000;
-
+*/
 
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
@@ -230,6 +232,7 @@ void onEvent (ev_t ev) {
  * @param filename The name of the file to read data from.
  */
 void sendDataFromFile(const char* filename) {
+    /*
     SD_init();
     
     File file = SD_open(filename, FILE_READ);
@@ -239,7 +242,7 @@ void sendDataFromFile(const char* filename) {
             }
     if (file.peek() == '\n') {
         goToSleep();
-    }
+    }*/
     uint8_t transmit_data[9];
     size_t linedata = data_processing(filename, transmit_data);
     if (LMIC.opmode & OP_TXRXPEND) {
@@ -250,6 +253,7 @@ void sendDataFromFile(const char* filename) {
     while (LMIC.opmode & OP_TXRXPEND) {
         os_runloop_once();
     }
+    loraWANActive = false;
     /*
     while (file.available()) {
         uint8_t data[51]={0};
@@ -365,27 +369,30 @@ void readLastPosition() {
  * @return The size of the processed data.
  */
 size_t data_processing(const char* filename, uint8_t* data){
-    readLastPosition();
+    //readLastPosition();
+    SD_init();
     File file = SD_open(filename, FILE_READ);
     unsigned long position = last_line;
     float  avrg_temp = 0;
     int lines_read = 0;
     String line_f;
-    if (position > 0) {
-        file.seek(position);
-    }
+    //if (position > 0) {
+     //   file.seek(position);
+    //}
     while (file.available()) {
         String line = file.readStringUntil('\n');
-        float temp;
-        sscanf(line.c_str(), "%f", &temp);
-        avrg_temp += temp;
-        lines_read++;
+        //float temp;
+        //sscanf(line.c_str(), "%f", &temp);
+        //avrg_temp += temp;
+        //lines_read++;
         line_f = line;
     }
     
-    avrg_temp /= lines_read;
+    //avrg_temp /= lines_read;
+    avrg_temp=20.02;
     Serial.print("Average temperature: ");Serial.println(avrg_temp);
     size_t linedata=Lineprocessing(line_f, data, avrg_temp);
+    //saveLastPosition(file.position());
     file.close();
     return linedata;
 }

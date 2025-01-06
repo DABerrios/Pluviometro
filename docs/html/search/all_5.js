@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['lastactivitytime_0',['lastActivityTime',['../main_8cpp.html#a94f69c5109e8c3076144a0ab061802fb',1,'main.cpp']]],
-  ['led_5fbuiltin_1',['LED_BUILTIN',['../main_8cpp.html#a8603b3fef2feef8e4fa66e6312573833',1,'main.cpp']]],
-  ['logdata_2',['logData',['../main_8cpp.html#abef06e3b619f047a7b59887b28b33c6e',1,'main.cpp']]],
-  ['loop_3',['loop',['../main_8cpp.html#afe461d27b9c48d5921c00d521181f12f',1,'main.cpp']]]
+  ['handledatalogging_0',['handleDataLogging',['../main_8cpp.html#a9f9d0ca80f41782edf366170577a124e',1,'handleDataLogging():&#160;main.cpp'],['../main_8h.html#a9f9d0ca80f41782edf366170577a124e',1,'handleDataLogging():&#160;main.cpp']]],
+  ['handlewifiserver_1',['handleWiFiServer',['../wifi__ap__serv_8cpp.html#a9d7eff099181f8ab48d175d12e3171c4',1,'handleWiFiServer():&#160;wifi_ap_serv.cpp'],['../wifi__ap__serv_8h.html#a9d7eff099181f8ab48d175d12e3171c4',1,'handleWiFiServer():&#160;wifi_ap_serv.cpp']]]
 ];
