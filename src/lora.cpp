@@ -306,7 +306,7 @@ size_t Lineprocessing(const String &line, uint8_t* data, float avrg_temp) {
     float rain;
     int day, month, year,hour, minute,second;
     int id;
-    sscanf(line.c_str(),"%f,%f,%d/%d/%d,%d:%d,:%d,%d",&temp,&rain,&day,&month,&year,&hour,&minute,&second,&id);      
+    sscanf(line.c_str(),"%f,%f,%d/%d/%d,%d:%d,:%d,%d",&temp,&rain,&day,&month,&year,&hour,&minute,&second,&id);   
     temp=avrg_temp;
     uint16_t tempInt = (uint16_t)(temp * 100);   
     uint16_t rainInt = (uint16_t)(rain * 1000);  
@@ -332,6 +332,11 @@ size_t Lineprocessing(const String &line, uint8_t* data, float avrg_temp) {
     data[index++] = timeInt & 0xFF;  
 
     Serial.print("Index: ");Serial.println(index);// to be removed for final version
+    for (size_t i = 0; i < index; i++) {
+        Serial.print(data[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println();
     return index;
 
 }
@@ -387,9 +392,9 @@ size_t data_processing(const char* filename, uint8_t* data){
         //lines_read++;
         line_f = line;
     }
-    
+    Serial.println(line_f);
     //avrg_temp /= lines_read;
-    avrg_temp=20.02;
+    avrg_temp=20.04;
     Serial.print("Average temperature: ");Serial.println(avrg_temp);
     size_t linedata=Lineprocessing(line_f, data, avrg_temp);
     //saveLastPosition(file.position());
