@@ -22,7 +22,8 @@
 
 
 /* Include the header files*/
-#include <lora.h>
+//#include <lora.h>
+#include <lora_otaa.h>
 #include <main.h>
 #include <temp_sens.h>
 #include <wifi_ap_serv.h>
@@ -41,15 +42,16 @@ SPIClass SPI2(HSPI);
 int RTC_DATA_ATTR num_id = 0;
 int RTC_DATA_ATTR bucket_tips_counter = 0;
 int bucket_tips_counter_log=0;
-int RTC_DATA_ATTR sec_to_micro = 1000000;
+int RTC_DATA_ATTR sec_to_micro = 1000000ULL;
 int RTC_DATA_ATTR sleep_interval = 60 ;;
 uint32_t RTC_DATA_ATTR rtimer = 0;
 int RTC_DATA_ATTR sleep_counter = 0;
 int RTC_DATA_ATTR sleep_counter_limit = 10;
+uint32_t RTC_DATA_ATTR SavedFcountr = 0;
 
 float temp102;
 
-
+uint8_t data_otaa[9];
 
 /* Preferences object to store data in the ESP32 flash memory*/
 Preferences preferences;
@@ -107,10 +109,12 @@ void setup() {
     preferences.begin("serial_num", false);
     preferences.begin("sleep_interval", false); 
     preferences.begin("rtimer", false);
+    
 
     /*get data from the preferences objects*/
     num_id = preferences.getInt("num_id", 0);
     sleep_interval = preferences.getInt("sleep_interval", 60);
+    
 
     /*Check if the wake-up was caused by the GPIO pin*/
     if (wakeup_reason == ESP_SLEEP_WAKEUP_EXT1) {
@@ -148,7 +152,7 @@ void setup() {
       sleep_counter++;
       if(sleep_counter>=sleep_counter_limit){
         sleep_counter=0;
-        loraWAN_config_and_transmition();
+        //lora_otaa_tx();
       }
       detachInterrupt(34);
       //set the ESP32 to deep sleep
@@ -181,7 +185,15 @@ void setup() {
         Serial.print("Temperature: ");
         Serial.println(BME280_read_temp());
         SD_init();
-        loraWAN_config_and_transmition();
+
+        os_init();
+        LMIC_reset();
+        do_send(&sendjob);
+        //loraWAN_config_and_transmition();
+        //lora_otaa_init();
+        //lora_otaa_tx();
+        //delay(10000);
+        //lora_otaa_tx();
          
     }
 
@@ -218,11 +230,13 @@ void loop() {
   }
   else if(loraWANActive){
     os_runloop_once();
-    loraWANActive = false;
+    
+    loraWANActive= false;
   }
   else{
     // If the server is not active, go to sleep
-  goToSleep();
+  os_runloop_once();  
+  //goToSleep();
   }                    
 }
 
@@ -263,7 +277,7 @@ void handleDataLogging() {
     char time[10] = "hh:mm:ss";
     RTC_get_time(time);
     char date[12] = "dd/mm/yyyy";
-    RTC_get_date(date);
+    RTC_get_date(date,sizeof(date));
 
     float rain=0.0;
     rain=bucket_tips_counter*0.0409;

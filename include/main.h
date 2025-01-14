@@ -23,5 +23,6 @@ extern SPIClass SPI2;
 extern Preferences preferences;
 extern int RTC_DATA_ATTR num_id;
 extern int RTC_DATA_ATTR sleep_interval;
+extern uint8_t data_otaa[];
 
 #endif /*MAIN_H */

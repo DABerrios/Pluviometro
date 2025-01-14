@@ -2,7 +2,7 @@
 #include <main.h>
 
 TMP102 sensor_tmp102;
-BME280 sensor_bme208;
+BME280 sensor_bme280;
 BME280_SensorMeasurements sensor_BME280_measurements;
 
 /**
@@ -51,25 +51,25 @@ float temp_102_read(){
  * and standby time. If the sensor cannot be connected, the function will print an error message 
  * and enter an infinite loop to halt further execution.
  * 
- * @note The function assumes that the sensor_bme208 object has been properly instantiated 
+ * @note The function assumes that the sensor_bme280 object has been properly instantiated 
  * and is accessible within the scope of this function.
  */
 void temp_BME280_init(){
-    if (!sensor_bme208.begin())
+    if (!sensor_bme280.begin())
     {
         Serial.println("BME280 cannot connect. Freezing...");
         while (1);
     }
-    sensor_bme208.setReferencePressure(1013.25);
-    sensor_bme208.setFilter(0);
-    sensor_bme208.setMode(0);
-    sensor_bme208.setPressureOverSample(16);
-    sensor_bme208.setHumidityOverSample(16);
-    sensor_bme208.setStandbyTime(0);
-    sensor_bme208.setTempOverSample(16);
-    sensor_bme208.setHumidityOverSample(1);
-    sensor_bme208.setPressureOverSample(1);
-    sensor_bme208.setMode(MODE_NORMAL);
+    sensor_bme280.setReferencePressure(1013.25);
+    sensor_bme280.setFilter(0);
+    sensor_bme280.setMode(0);
+    sensor_bme280.setPressureOverSample(16);
+    sensor_bme280.setHumidityOverSample(16);
+    sensor_bme280.setStandbyTime(0);
+    sensor_bme280.setTempOverSample(16);
+    sensor_bme280.setHumidityOverSample(1);
+    sensor_bme280.setPressureOverSample(1);
+    sensor_bme280.setMode(MODE_NORMAL);
 }
 /**
  * @brief Reads the temperature from the BME280 sensor.
@@ -81,9 +81,9 @@ void temp_BME280_init(){
  */
 float BME280_read_temp(){
     float temp;
-    while (sensor_bme208.isMeasuring()){
+    while (sensor_bme280.isMeasuring()){
     }   
-    sensor_bme208.readAllMeasurements(&sensor_BME280_measurements);
+    sensor_bme280.readAllMeasurements(&sensor_BME280_measurements);
     temp = sensor_BME280_measurements.temperature;
     return temp;
 }
@@ -97,9 +97,9 @@ float BME280_read_temp(){
  */
 float BME280_read_pressure(){
     float pressure;
-    while (sensor_bme208.isMeasuring()){
+    while (sensor_bme280.isMeasuring()){
     } 
-    sensor_bme208.readAllMeasurements(&sensor_BME280_measurements);
+    sensor_bme280.readAllMeasurements(&sensor_BME280_measurements);
     pressure = sensor_BME280_measurements.pressure;
     return pressure;
 }
@@ -113,9 +113,9 @@ float BME280_read_pressure(){
  */
 float BME280_read_humidity(){
     float humidity;
-    while (sensor_bme208.isMeasuring()){
+    while (sensor_bme280.isMeasuring()){
     } 
-    sensor_bme208.readAllMeasurements(&sensor_BME280_measurements);
+    sensor_bme280.readAllMeasurements(&sensor_BME280_measurements);
     humidity = sensor_BME280_measurements.humidity;
     return humidity;
 }

@@ -46,7 +46,7 @@ void RTC_get_time(char* time){
  * @param date A character array where the formatted date string will be stored.
  *             The date will be formatted as "DD/MM/YYYY".
  */
-void RTC_get_date(char* date){
+void RTC_get_date(char* date, size_t size){
     DateTime now = rtc.now();
-    snprintf(date,sizeof(date),"%02d/%02d/%04d",now.day(),now.month(),now.year());    
+    snprintf(date,sizeof(size),"%02d/%02d/%04d",now.day(),now.month(),now.year());    
 }
